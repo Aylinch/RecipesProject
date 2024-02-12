@@ -1,0 +1,35 @@
+﻿@model RecipesProject.Models.LoginViewModel
+@{
+    ViewData["Title"] = "LogIn";
+}
+<div class="container">
+    <div class="row shadow rounded">
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div>
+                <img src="~/images/fideos-schezwan-o-fideos-hakka-verduras-o-chow-mein-son-recetas-populares-indochinas-que-sirven-tazon-o-plato-palillos-madera_466689-46360.webp" class="w-100" />
+            </div>
+        </div>
+       <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+           <form autocomplete="off" method="post" class="p-3">
+           <div class="mb-3">
+               <h2 class="text-pink">Log In</h2>
+               <span>Login into your account </span>
+           </div> 
+           <div class="mb-3">
+                    @Html.ValidationSummary()
+                </div>
+           <div class="form-floating mb-3">
+               @Html.TextBoxFor(m=>m.UserName, new {@class="form-control",placeholder="UserName"})
+               <label asp-for="UserName">User name</label>
+           </div>
+            <div class="form-floating mb-3">
+               @Html.TextBoxFor(m=>m.Password, new {@class="form-control", placeholder="Password", type="password"})
+               <label class="form-label" asp-for="Password">Password</label>
+           </div>
+           <div class="mb-3">
+               <button class="btn btn-sn btn-dark wbg-opacity-100 p-2" type="submit">Log in</button>
+           </div>
+           </form>
+       </div>
+    </div>
+</div>
