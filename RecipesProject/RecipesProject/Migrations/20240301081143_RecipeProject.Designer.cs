@@ -9,11 +9,11 @@ using RecipesProject.Data;
 
 #nullable disable
 
-namespace RecipesProject.Data.Migrations
+namespace RecipesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240206062358_InitilizeApplicationDatabase")]
-    partial class InitilizeApplicationDatabase
+    [Migration("20240301081143_RecipeProject")]
+    partial class RecipeProject
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -255,6 +255,38 @@ namespace RecipesProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("249d47fb-bb25-45c3-bc04-43ccbe4005b6"),
+                            Name = "Breakfast"
+                        },
+                        new
+                        {
+                            Id = new Guid("0f340dfe-e181-4001-8e40-1602eacb42f7"),
+                            Name = "Apetizer"
+                        },
+                        new
+                        {
+                            Id = new Guid("748f2fe4-72ae-4663-9c98-52a41c24777f"),
+                            Name = "Soup"
+                        },
+                        new
+                        {
+                            Id = new Guid("7a378c4d-0abd-41a7-99e7-38d8c62634e8"),
+                            Name = "Salad"
+                        },
+                        new
+                        {
+                            Id = new Guid("a00aea51-a6de-4d8d-98cf-793508565d64"),
+                            Name = "Dessert"
+                        },
+                        new
+                        {
+                            Id = new Guid("fbeb2eda-cb06-4592-a156-2db8126bb0d7"),
+                            Name = "Main dish "
+                        });
                 });
 
             modelBuilder.Entity("RecipesProject.Data.Entities.Ingredient", b =>
@@ -289,7 +321,6 @@ namespace RecipesProject.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Instructions")
@@ -413,9 +444,11 @@ namespace RecipesProject.Data.Migrations
 
             modelBuilder.Entity("RecipesProject.Data.Entities.Recipe", b =>
                 {
-                    b.HasOne("RecipesProject.Data.Entities.Category", null)
+                    b.HasOne("RecipesProject.Data.Entities.Category", "Category")
                         .WithMany("Recipes")
                         .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("RecipesProject.Data.Entities.RecipeIngredients", b =>

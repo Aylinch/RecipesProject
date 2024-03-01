@@ -2,7 +2,7 @@
 
 /* Color variables */
 :root {
-    --clr-primary: #d50000;
+    --clr-primary: red;
     --clr-primary-hover: #29e6a7;
     --clr-primary-dark: #039d69;
     --clr-gray100: #f9fbff;
@@ -42,13 +42,14 @@ body {
 
 .card {
     overflow: hidden;
-    box-shadow: 0 2px 20px var(--clr-gray300);
+    box-shadow: 50px;
     border-radius: var(--radius);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
     transition: transform 200ms ease-in;
+    margin-right: 20px;
 }
 
 .card__image {
@@ -73,7 +74,7 @@ body {
     margin: 1rem;
     border: 2px solid var(--clr-primary);
     background: transparent;
-    color: var(--clr-primary);
+    color:red;
     border-radius: var(--radius);
     transition: background 200ms ease-in, color 200ms ease-in;
 }

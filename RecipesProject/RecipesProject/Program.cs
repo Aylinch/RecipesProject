@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RecipesProject.Contracts;
 using RecipesProject.Data;
 using RecipesProject.Data.Account;
+using RecipesProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +14,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/User/Login";
 });
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

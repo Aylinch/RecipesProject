@@ -21,6 +21,38 @@ namespace RecipesProject.Data
                 .HasKey(x => new { x.IngredientId, x.RecipeId });
             builder.Entity<RecipeUser>()
                 .HasKey(x => new { x.UserId, x.RecipeId });
+            builder.Entity<Category>()
+                .HasData(new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Breakfast",
+                },
+                new Category()
+                {
+                    Id= Guid.NewGuid(),
+                    Name="Apetizer"
+                },
+                new Category()
+                {
+                    Id=Guid.NewGuid(),  
+                    Name="Soup",
+                },
+                 new Category()
+                 {
+                     Id = Guid.NewGuid(),
+                     Name = "Salad",
+                 },
+                  new Category()
+                  {
+                      Id = Guid.NewGuid(),
+                      Name = "Dessert"
+                  },
+                   new Category()
+                   {
+                       Id = Guid.NewGuid(),
+                       Name = "Main dish "
+                   }
+                );
         }
     }
 }

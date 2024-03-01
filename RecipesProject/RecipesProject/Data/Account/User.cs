@@ -8,9 +8,9 @@ namespace RecipesProject.Data.Account
     {
         public HashSet<RecipeUser> RecipeUsers { get; set; }  = new HashSet<RecipeUser>();    
         [Required]
-        public string FirstName { get; set; }   
+        public string? FirstName { get; set; }   
         [Required]
-        public string LastName { get; set; }    
+        public string? LastName { get; set; }    
         public int Age { get; set; }    
     }
 }

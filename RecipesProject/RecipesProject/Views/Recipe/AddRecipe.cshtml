@@ -1,0 +1,94 @@
+﻿@model RecipesProject.Models.RecipeViewModels.AddRecipeViewModel
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-primary text-white">Add Recipe</div>
+
+                <div class="card-body">
+                    <form asp-action="AddRecipe" method="post">
+                        <div class="form-group">
+                            <label asp-for="Title" class="fw-bold">Title:</label>
+                            <input type="text" asp-for="Title" class="form-control" aria-required="true">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="fw-bold">Description:</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" aria-required="true"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Instructions" class="fw-bold">Instructions:</label>
+                            <textarea asp-for="Instructions" class="form-control" rows="5" aria-required="true"></textarea>
+                            <span asp-validation-for="Instructions" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="PrepTime" class="fw-bold">Prep Time (minutes):</label>
+                                    <input type="number" asp-for="PrepTime" class="form-control" aria-required="true" min="0">
+                                    <span asp-validation-for="PrepTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="CookTime" class="fw-bold">Cook Time (minutes):</label>
+                                    <input type="number" asp-for="CookTime" class="form-control" aria-required="true" min="0">
+                                    <span asp-validation-for="CookTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="TotalTime" class="fw-bold">Total Time (minutes):</label>
+                                    <input type="number" asp-for="TotalTime" class="form-control" aria-required="true" min="0">
+                                    <span asp-validation-for="TotalTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Servings" class="fw-bold">Servings:</label>
+                            <input type="number" asp-for="Servings" class="form-control" aria-required="true" min="1">
+                            <span asp-validation-for="Servings" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Image" class="fw-bold">Image URL:</label>
+                            <input type="text" asp-for="Image" class="form-control" aria-required="true">
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label  asp-for="CategoryId" class="form-label fw-bold">Category</label>
+                            <select class="form-control" asp-for="CategoryId" asp-items="ViewBag.CategoryId" aria-required="true"></select>
+                           <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-4">
+                            <label class="fw-bold">Ingredients:</label>
+                            <div id="ingredients">
+                                <div class="ingredient">
+                                    <input type="text" name="Ingredients[0].Name" class="form-control mb-2" placeholder="Ingredient name:" aria-required="true">
+                                    <input type="text" name="Ingredients[0].Quantity" class="form-control mb-2" placeholder="Quantity:" aria-required="true">
+                                </div>
+                            </div>
+                            <button type="button" id="addIngredient" class="btn btn-secondary mt-3">Add Ingredient</button>
+                        </div>
+                        <button type="submit" class="btn btn-danger mt-3">Add Recipe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(function () {
+        $('#addIngredient').click(function () {
+            var index = $('.ingredient').length;
+            var newIngredient = $('<div class="ingredient">' +
+                '<input type="text" name="Ingredients[' + index + '].Name" class="form-control mb-2" placeholder="Ingredient name:" required>' +
+                '<input type="text" name="Ingredients[' + index + '].Quantity" class="form-control" placeholder="Quantity:" required>' +
+                '</div>');
+            $('#ingredients').append(newIngredient);
+        });
+    });
+</script>
+}

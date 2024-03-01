@@ -1,0 +1,74 @@
+﻿/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&display=swap');
+
+/* Card Styles */
+.card-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.card {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background-color: #fafafa;
+    border: 2px solid rgba(0, 0, 0, 0.10);
+    max-width: 450px;
+    min-height: 350px;
+    box-shadow: 2px 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card--img {
+    background: url('https://i0.wp.com/images-prod.healthline.com/hlcmsresource/images/AN_images/eggs-breakfast-avocado-1296x728-header.jpg?w=1155&h=1528');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 450px;
+    height: 250px
+}
+
+.card--text {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem 2rem 2rem;
+}
+
+.card--title {
+    padding-top: 3rem;
+    color: #313135;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.card--sub {
+    padding-top: 2rem;
+    font-size: 20px;
+    color: #59595c;
+    margin-bottom: 40px;
+}
+
+/* Call-to-Action Button Styles */
+.cta {
+    justify-self: flex-end;
+    text-decoration: none;
+    color: #f2f2f2;
+    background-color: #0b6e4f;
+    border-radius: 4px;
+    font-size: 20px;
+    padding: 0.4rem 0;
+    width: 200px;
+    text-align: center;
+    box-shadow: 2px 4px 12px rgba(10, 88, 64, 0.2);
+}
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited {
+    color: white;
+    text-decoration: none;
+}
