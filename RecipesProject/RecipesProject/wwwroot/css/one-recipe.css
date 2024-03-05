@@ -1,0 +1,180 @@
+﻿html,
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #f8f9fa;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333333;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+figcaption {
+    display: none;
+}
+
+.container {
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.article {
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 718px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+}
+
+.thumbnail {
+    max-width: 100%;
+    width: 100%;
+    max-height: 350px;
+    margin: 0;
+}
+
+    .thumbnail img {
+        object-fit: cover;
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+    }
+
+.col {
+    position: relative;
+    padding: 1rem;
+}
+
+.meta-section {
+    flex-direction: column;
+}
+
+@media (min-width: 718px) {
+    .meta-section {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .meta-wrapper {
+        padding-left: 10px;
+    }
+}
+
+.main-title {
+    padding: 10px 10px;
+    font-size: 24px;
+    color: white;
+    background-color: #ff6347;
+    margin: 0;
+}
+
+.sub-title {
+    font-size: 20px;
+    padding: 10px 10px;
+    background-color: #ff6347;
+    color: white;
+    text-align: center;
+}
+
+.background-image {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+    .background-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .background-image:before {
+        content: " ";
+        display: block;
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        background-color: hsla(0,0%,100%,.80);
+    }
+
+.ingredients-wrapper {
+    position: relative;
+    z-index: 2;
+}
+
+.recipe-details .list {
+    list-style: none;
+    padding: 0;
+}
+
+    .recipe-details .list .list-item {
+        display: inline-block;
+        padding: .2rem .5rem;
+        background-color: #eeeeee;
+        border-radius: 3px;
+        margin: 5px;
+        font-size: 14px;
+        font-style: italic;
+        color: #557b97;
+    }
+
+.ingredients {
+    padding: 20px;
+}
+
+    .ingredients li {
+        padding: 5px;
+    }
+
+.instructions {
+    list-style: none;
+    counter-reset: my-awesome-counter;
+}
+
+    .instructions ul {
+        padding: 15px;
+    }
+
+    .instructions li {
+        padding: 5px 0;
+    }
+
+    .instructions > li {
+        counter-increment: my-awesome-counter;
+        margin-left: .5rem;
+    }
+
+        .instructions > li:before {
+            content: "." counter(my-awesome-counter);
+            display: inline-block;
+            color: #ff6347;
+            padding: 5px;
+            margin: 5px;
+            font-style: italic;
+            font-weight: bold;
+            width: 1em;
+            margin-left: -1.5em;
+            margin-right: 0.5em;
+            text-align: right;
+            direction: rtl;
+        }

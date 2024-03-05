@@ -34,7 +34,7 @@
                             <div class="card--sub">
                                 @recipe.Description
                             </div>
-                            <a href="@Url.Action("Details", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
+                            <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
                         </div>
                     </div>
                 }

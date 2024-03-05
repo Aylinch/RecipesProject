@@ -54,5 +54,14 @@ namespace RecipesProject.Services
             }
             await dbContext.SaveChangesAsync();
         }
+        public async Task<Recipe> GetRecipeByIdAsync(Guid id)
+        {
+            var recipe=await dbContext.Recipes
+                .Include(r => r.Category)
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefaultAsync(r => r.Id == id);
+            return recipe;
+        }
     }
-}
+    }

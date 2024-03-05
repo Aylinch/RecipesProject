@@ -43,5 +43,22 @@ namespace RecipesProject.Controllers
             return View("AllRecipes", model);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<Recipe>> GetRecipeById(Guid id)
+        {
+            var recipe = await recipeService.GetRecipeByIdAsync(id);
+
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            return View(recipe);
+        }
+        [HttpGet]
+        public async Task<IActionResult>AllCategory()
+        {
+            return View();  
+        }
     }
 }
