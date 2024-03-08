@@ -55,10 +55,5 @@ namespace RecipesProject.Controllers
 
             return View(recipe);
         }
-        [HttpGet]
-        public async Task<IActionResult>AllCategory()
-        {
-            return View();  
-        }
     }
 }

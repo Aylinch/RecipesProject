@@ -17,8 +17,12 @@ namespace RecipesProject.Services
 
         public async Task<List<Category>> AllCategoryAsync()
         {
-            var recipes = await dbContext.Categories.ToListAsync();
-            return recipes;
+            return await dbContext.Categories.ToListAsync();
+        }
+
+        public async Task<List<Recipe>> AllFromCategoriesAsync(Guid categoryId)
+        {
+            return await dbContext.Recipes.Where(x => x.Category.Id == categoryId).ToListAsync();
         }
     }
 }
