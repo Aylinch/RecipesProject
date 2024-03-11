@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RecipesProject.Data.Account;
 using RecipesProject.Models;
 
@@ -23,18 +24,18 @@ namespace RecipesProject.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            if(User?.Identity?.IsAuthenticated ?? false)
+            if (User?.Identity?.IsAuthenticated ?? false)
             {
                 return RedirectToAction("Index", "Home");
             }
             var model = new RegisterViewModel();
-            return View(model); 
+            return View(model);
         }
-        [HttpPost]  
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
@@ -51,7 +52,7 @@ namespace RecipesProject.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            foreach(var item in result.Errors)
+            foreach (var item in result.Errors)
             {
                 ModelState.AddModelError("", item.Description);
             }
@@ -61,33 +62,32 @@ namespace RecipesProject.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            if(User?.Identity?.IsAuthenticated ?? false)
+            if (User?.Identity?.IsAuthenticated ?? false)
             {
                 return RedirectToAction("Index", "Home");
             }
-            var model=new LoginViewModel(); 
+            var model = new LoginViewModel();
             return View(model);
         }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            var user = await userManager.FindByNameAsync(model.UserName);   
-            if(user != null)
+            var user = await userManager.FindByNameAsync(model.UserName);
+            if (user != null)
             {
                 var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
             ModelState.AddModelError("", "Invalid login");
-            return View(model); 
+            return View(model);
         }
     }
 }
-    
