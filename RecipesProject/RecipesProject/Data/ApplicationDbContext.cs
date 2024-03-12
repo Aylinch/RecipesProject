@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RecipesProject.Data.Account;
+using RecipesProject.Data.Configuration;
 using RecipesProject.Data.Entities;
 
 namespace RecipesProject.Data
@@ -16,43 +17,13 @@ namespace RecipesProject.Data
         public DbSet<Category> Categories { get; set; } 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new RecipeIngredientConfiguration());
+            builder.ApplyConfiguration(new RecipeUserConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new UserRolesConfiguration());
             base.OnModelCreating(builder);
-            builder.Entity<RecipeIngredients>()
-                .HasKey(x => new { x.IngredientId, x.RecipeId });
-            builder.Entity<RecipeUser>()
-                .HasKey(x => new { x.UserId, x.RecipeId });
-            builder.Entity<Category>()
-                .HasData(new Category()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Breakfast",
-                },
-                new Category()
-                {
-                    Id= Guid.NewGuid(),
-                    Name="Apetizer"
-                },
-                new Category()
-                {
-                    Id=Guid.NewGuid(),  
-                    Name="Soup",
-                },
-                 new Category()
-                 {
-                     Id = Guid.NewGuid(),
-                     Name = "Salad",
-                 },
-                  new Category()
-                  {
-                      Id = Guid.NewGuid(),
-                      Name = "Dessert"
-                  },
-                   new Category()
-                   {
-                       Id = Guid.NewGuid(),
-                       Name = "Main dish "
-                   }
-                );
         }
     }
 }
