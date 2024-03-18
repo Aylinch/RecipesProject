@@ -55,5 +55,23 @@ namespace RecipesProject.Controllers
 
             return View(recipe);
         }
+        [HttpGet]
+        public IActionResult Filters()
+        {
+            var model = new FiltersViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Filters(FiltersViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var filteredRecipes = await recipeService.FilterRecipesAsync(model);
+                return View(filteredRecipes); 
+            }
+            return View(model);
+        }
+
     }
 }
