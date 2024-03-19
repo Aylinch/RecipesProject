@@ -1,24 +1,25 @@
 ﻿@model RecipesProject.Data.Entities.Recipe
+  <link rel="stylesheet" href="~/css/one-recipe.css" />
   <div class="container">
     <article class="article">
       <div class="col meta-section">
         <div class="meta-wrapper">
-          <h1 class="main-title">@Model.Title</h1>
+          <h1 class="main-title">@Model?.Title</h1>
           <div class="description">
-            <p>@Model.Description </p>
+            <p>@Model?.Description </p>
           
           </div>
           <div class="recipe-details">
           <ul class="list">
-            <li class="list-item">Servings: @Model.Servings</li>
-            <li class="list-item">Prep Time: @Model.PrepTime</li>
-            <li class="list-item">Cook Time: @Model.CookTime</li>
-            <li class="list-item">Total Time: @Model.TotalTime</li>
+            <li class="list-item">Servings: @Model?.Servings</li>
+            <li class="list-item">Prep Time: @Model?.PrepTime</li>
+            <li class="list-item">Cook Time: @Model?.CookTime</li>
+            <li class="list-item">Total Time: @Model?.TotalTime</li>
           </ul>
         </div>
         </div>
           <figure class="thumbnail">
-          <img src="@Model.Image" alt="@Model.Title">
+          <img src="@Model!.Image" alt="@Model.Title">
         </figure>
         </div>
       <div class="col">
@@ -27,18 +28,18 @@
             <ul>
                 @foreach (var ingredient in Model.RecipeIngredients)
                 {
-                    <li>@ingredient.IngredientQuanitity @ingredient.Ingredient.Name</li>
+                    <li>@ingredient.IngredientQuanitity @ingredient.Ingredient!.Name</li>
                 }
             </ul>
         </div>
         <figure class="background-image">
          <img src="@Model.Image" alt="@Model.Title" />
-      </div>
        </figure>
+       </div>
       <div class="col">
         <h2 class="sub-title">The Process</h2>
          <ol class="instructions">
-                @foreach (var step in Model.Instructions.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
+                @foreach (var step in Model.Instructions!.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
                 {
                     <li>@step</li>
                 }

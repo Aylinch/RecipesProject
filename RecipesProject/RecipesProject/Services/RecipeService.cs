@@ -61,7 +61,7 @@ namespace RecipesProject.Services
                 .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefaultAsync(r => r.Id == id);
-            return recipe;
+            return recipe!;
         }
     }
     }

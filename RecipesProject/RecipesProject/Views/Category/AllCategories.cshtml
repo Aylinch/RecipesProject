@@ -1,28 +1,33 @@
 ﻿@model List<RecipesProject.Data.Entities.Category>
+<link rel="stylesheet" href="~/css/all-categories.css" />
 <form>
-<section id="header" class="jumbotron text-center">
-    <div class="text-black">
-        <h1 class="display-3" style="padding-top: 50px">Category</h1>
-        <p style="padding-bottom: 100px" class="lead">Explore delicious recipes from various categories.</p>
-    </div>
-</section>
-
-<section id="gallery">
-    <div class="container">
-        <div class="row mt-4">
-            @foreach (var category in Model)
-            {
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <a href="@Url.Action("AllFromCategories", "Category", new { categoryId = category.Id })" style="text-decoration: none; color: black">
-                            <div class="card-body">
-                                <h5 class="card-title">@category.Name</h5>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            }
+    <section id="header" class="jumbotron text-center">
+        <div class="text-black">
+            <h1 class="display-3" style="padding-top: 50px">Category</h1>
+            <p style="padding-bottom: 100px" class="lead">Explore delicious recipes from various categories.</p>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section id="gallery">
+        <div class="container">
+            <div class="row mt-4 card-container">
+                @foreach (var category in Model)
+                {
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <a href="@Url.Action("AllFromCategories", "Category", new { categoryId = category.Id })" style="text-decoration: none; color: black">
+                                <img class="card__image" src="@category.CategoryImage" alt="@category.Name">
+                                <div class="card__content">
+                                    <div class="card__header">
+                                        <h4 class="card__title">@category.Name</h4>
+                                    </div>
+                                    <p class="card__text"></p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
 </form>
