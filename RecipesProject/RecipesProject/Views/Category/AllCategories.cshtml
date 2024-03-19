@@ -1,30 +1,28 @@
 ﻿@model List<RecipesProject.Data.Entities.Category>
 <form>
-    <section id="header" class="jumbotron text-center">
-        <div class="text-black">
-            <h1 class="display-3" style="padding-top: 50px">Category</h1>
-            <p style="padding-bottom: 100px" class="lead">Explore delicious recipes from various categories.</p>
-        </div>
-    </section>
+<section id="header" class="jumbotron text-center">
+    <div class="text-black">
+        <h1 class="display-3" style="padding-top: 50px">Category</h1>
+        <p style="padding-bottom: 100px" class="lead">Explore delicious recipes from various categories.</p>
+    </div>
+</section>
 
-    <section id="gallery">
-        <div class="mt-2" style="column-count:3">
-                @foreach (var category in Model)
-                {
-                    
-                        <div class="card" style="align-items:stretch;margin:0;max-width:30em;">
-                            <a href="@Url.Action("AllFromCategories", "Category", new { categoryId = category.Id })" style="text-decoration: none; color: black">
-                                <img class="card__image" src="https://images.unsplash.com/photo-1481070414801-51fd732d7184?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80" alt="">
-                                <div class="card__content">
-                                    <div class="card__header">
-                                        <h4 class="card__title">@category.Name</h4>
-
-                                    </div>
-                                    <p class="card__text"></p>
-                                </div>
-                        </div>
-                    
-                }
+<section id="gallery">
+    <div class="container">
+        <div class="row mt-4">
+            @foreach (var category in Model)
+            {
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <a href="@Url.Action("AllFromCategories", "Category", new { categoryId = category.Id })" style="text-decoration: none; color: black">
+                            <div class="card-body">
+                                <h5 class="card-title">@category.Name</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
         </div>
-    </section>
+    </div>
+</section>
 </form>

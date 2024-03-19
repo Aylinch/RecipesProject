@@ -8,7 +8,6 @@ namespace RecipesProject.Contracts
         Task<List<Recipe>> AllAsync();
         Task AddRecipe(AddRecipeViewModel model);
         Task<Recipe> GetRecipeByIdAsync(Guid id);
-        Task<List<RecipeViewModel>> FilterRecipesAsync(FiltersViewModel model);
 
     }
 }

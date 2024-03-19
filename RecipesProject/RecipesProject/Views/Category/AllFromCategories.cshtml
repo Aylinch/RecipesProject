@@ -1,25 +1,24 @@
 ﻿@model List<RecipesProject.Data.Entities.Recipe>
 <link rel="stylesheet" href="~/css/all-recipes.css">
 <div class="row">
-    <div class="col-10">
-        <div class="card-container">
-            @foreach (var recipe in Model)
-            {
-                <div class="card">
-                    <div class="card--img">
+            <div class="col-10">
+            <div class="card-container">
+                @foreach (var recipe in Model)
+                {
+                    <div class="card">
+                        <div class="card--img">
                         <img class="card--img" src="@recipe.Image" alt="@recipe.Title">
-                    </div>
-                    <div class="card--text">
-                        <div class="card--title">
-                            @recipe.Title
                         </div>
-                        <div class="card--sub">
-                            @recipe.Description
+                        <div class="card--text">
+                            <div class="card--title">
+                                @recipe.Title
+                            </div>
+                            <div class="card--sub">
+                                @recipe.Description
+                            </div>
+                            <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
                         </div>
-                        <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
-    </div>
-</div>

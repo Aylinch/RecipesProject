@@ -13,20 +13,18 @@
     <div class="row">
         <div class="col-2">
             <div class="shadow rounded">
-                <div class="border-bottom border-3 p-4">
-                    <h4 class="text-pink text-center fst-italic">Filter recipes</h4>
-                    @await Html.PartialAsync("Filters",new RecipesProject.Models.RecipeViewModels.FiltersViewModel())
+                <div class="border-bottom border-3 p-2">
+                    <h4 class="text-pink text-center fst-italic">Recipes</h4>
+                    @await Html.PartialAsync("_SideMenu")
                 </div>
             </div>
         </div>
         <div class="col-10">
             <div class="card-container">
-                @if (Model.Any())
+                @foreach (var recipe in Model)
                 {
-                    @foreach (var recipe in Model)
-                    {
-                        <div class="card">
-                            <div class="card--img">
+                    <div class="card">
+                        <div class="card--img">
                         <img class="card--img" src="@recipe.Image" alt="@recipe.Title">
                         </div>
                         <div class="card--text">
@@ -39,11 +37,6 @@
                             <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
                         </div>
                     </div>
-                    }
-                }
-                else
-                {
-                    <p>Not found recipes with this filters.</p>
                 }
             </div>
         </div>
