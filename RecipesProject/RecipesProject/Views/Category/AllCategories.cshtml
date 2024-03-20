@@ -10,10 +10,10 @@
 
     <section id="gallery">
         <div class="container">
-            <div class="row mt-4 card-container">
-                @foreach (var category in Model)
+            <div class="row mt-4 justify-content-center card-container">
+                @foreach (var category in Model!)
                 {
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-4 mb-3">
                         <div class="card">
                             <a href="@Url.Action("AllFromCategories", "Category", new { categoryId = category.Id })" style="text-decoration: none; color: black">
                                 <img class="card__image" src="@category.CategoryImage" alt="@category.Name">

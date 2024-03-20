@@ -3,6 +3,7 @@ using RecipesProject.Contracts;
 using RecipesProject.Data;
 using RecipesProject.Data.Entities;
 using RecipesProject.Models.RecipeViewModels;
+using System.Linq;
 
 namespace RecipesProject.Services
 {
@@ -56,12 +57,75 @@ namespace RecipesProject.Services
         }
         public async Task<Recipe> GetRecipeByIdAsync(Guid id)
         {
-            var recipe=await dbContext.Recipes
+            var recipe = await dbContext.Recipes
                 .Include(r => r.Category)
                 .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefaultAsync(r => r.Id == id);
             return recipe!;
         }
+
+        public async Task<List<RecipeViewModel>> FilterAsync(FilterViewModel model)
+        {
+            var servings = model.ServingsFilter;
+            var ingredients = model.IngredientFilter;
+            var time = model.TimeFilter;
+            var recipes = await dbContext.Recipes.Include(x => x.Category).Include(x => x.RecipeIngredients).ThenInclude(x => x.Ingredient).ToListAsync();
+            if (servings != null)
+            {
+                recipes = recipes.Where(x => x.Servings == servings).ToList();
+            }
+            if (ingredients != null)
+            {
+                if (ingredients == "chicken")
+                {
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("chicken"))).ToList();
+                }
+                if (ingredients == "beef")
+                {
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("beef"))).ToList();
+                }
+                if (ingredients == "pork")
+                {
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("pork"))).ToList();
+                }
+                if (ingredients == "pork")
+                {
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("spaghetti"))).ToList();
+                }
+
+            }
+            if (time != null)
+            {
+                switch (time)
+                {
+                    case "fast":
+                        recipes = recipes.Where(x => x.CookTime <= 20).ToList();
+                        break;
+                    case "medium":
+                        recipes = recipes.Where(x => x.CookTime > 20 && x.PrepTime <= 45).ToList();
+                        break;
+                    case "slow":
+                        recipes = recipes.Where(x => x.CookTime > 45).ToList();
+                        break;
+                }
+            }
+            return recipes.Select(recipe =>
+                 new RecipeViewModel
+               {
+           Id = recipe.Id,
+           Title = recipe.Title,
+           Description = recipe.Description,
+           Instructions = recipe.Instructions,
+           PrepTime = recipe.PrepTime,
+           CookTime = recipe.CookTime,
+           TotalTime = recipe.TotalTime,
+           Servings = recipe.Servings,
+           Image = recipe.Image,
+           CategoryId = recipe.CategoryId,
+           RecipeIngredients = recipe.RecipeIngredients,
+       }).ToList();
+        }
+
     }
-    }
+}
