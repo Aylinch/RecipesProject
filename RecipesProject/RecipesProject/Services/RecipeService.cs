@@ -16,9 +16,25 @@ namespace RecipesProject.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<List<Recipe>> AllAsync()
+        public async Task<List<RecipeViewModel>> AllAsync()
         {
-            var recipes = await dbContext.Recipes.ToListAsync();
+            var recipes = await dbContext.Recipes
+                .Select(recipe => new RecipeViewModel()
+                {
+                    Id = recipe.Id,
+                    Title = recipe.Title,
+                    Description = recipe.Description,
+                    Instructions = recipe.Instructions,
+                    PrepTime = recipe.PrepTime,
+                    CookTime = recipe.CookTime,
+                    TotalTime = recipe.TotalTime,
+                    Servings = recipe.Servings,
+                    Image = recipe.Image,
+                    CategoryId = recipe.CategoryId,
+                    RecipeIngredients = recipe.RecipeIngredients,
+
+                })
+                .ToListAsync();
             return recipes;
         }
 
@@ -79,7 +95,7 @@ namespace RecipesProject.Services
             {
                 if (ingredients == "chicken")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("chicken"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name!.Contains("chicken"))).ToList();
                 }
                 if (ingredients == "beef")
                 {

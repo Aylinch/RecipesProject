@@ -21,7 +21,7 @@ namespace RecipesProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllRecipes()
         {
-            List<Recipe> recipes = await recipeService.AllAsync();
+            List<RecipeViewModel> recipes = await recipeService.AllAsync();
             return View(recipes);
         }
         [HttpGet]
@@ -55,11 +55,12 @@ namespace RecipesProject.Controllers
 
             return View(recipe);
         }
+  
         [HttpGet]
         public async Task<IActionResult> Filter(FilterViewModel model)
         {
-            var recipes = await recipeService.FilterAsync(model);
-            return View("AllRecipes", model);
+           var recipes = await recipeService.FilterAsync(model);
+           return View("AllRecipes", recipes);
         }
     }
 }

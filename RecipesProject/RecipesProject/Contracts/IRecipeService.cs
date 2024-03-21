@@ -5,7 +5,7 @@ namespace RecipesProject.Contracts
 {
     public interface IRecipeService
     {
-        Task<List<Recipe>> AllAsync();
+        Task<List<RecipeViewModel>> AllAsync();
         Task AddRecipe(AddRecipeViewModel model);
         Task<Recipe> GetRecipeByIdAsync(Guid id);
         Task<List<RecipeViewModel>> FilterAsync(FilterViewModel model);
