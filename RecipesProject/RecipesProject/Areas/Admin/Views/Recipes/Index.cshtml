@@ -1,85 +1,59 @@
-﻿@model IEnumerable<RecipesProject.Data.Entities.Recipe>
+﻿<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/admin-index.css" />
+@model IEnumerable<RecipesProject.Data.Entities.Recipe>
 
-@{
-    ViewData["Title"] = "Index";
-    Layout = "../../../../Views/Shared/_Layout.cshtml";
-}
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrepTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CookTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Servings)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Instructions)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrepTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CookTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Servings)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<body>
+    <div class="container-fluid">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Manage <b>Recipes</b></h2>
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Total time</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis;">
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalTime)min
+                            </td>
+                            <td>
+                                <img src="@Url.Content(item.Image)" alt="Recipe Image" style="max-width: 200px; max-height: 200px;" />
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                <a href="#acceptEmployeeModal" class="accept" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Accept">&#xE5CA;</i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

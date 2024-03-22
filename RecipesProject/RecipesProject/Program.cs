@@ -23,7 +23,7 @@ builder.Services.AddDefaultIdentity<User>(options => {
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/User/Login";
+    options.LoginPath = "/Account/Login";
 });
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
@@ -50,16 +50,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-      name: "areas",
+      name: "Admin",
       pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
 });
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
