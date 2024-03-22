@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RecipesProject.Areas.Admin.Models;
 using RecipesProject.Data;
 using RecipesProject.Data.Entities;
+using RecipesProject.Models.RecipeViewModels;
 
 namespace RecipesProject.Areas.Admin.Controllers
 {
@@ -72,56 +74,93 @@ namespace RecipesProject.Areas.Admin.Controllers
         }
 
         // GET: Admin/Recipes/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null || _context.Recipes == null)
-            {
-                return NotFound();
-            }
+            var existingRecipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefaultAsync(r => r.Id == id);
 
-            var recipe = await _context.Recipes.FindAsync(id);
-            if (recipe == null)
+            if (existingRecipe == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
+            var editViewModel = new EditRecipeViewModel
+            {
+                Id = existingRecipe.Id,
+                Title = existingRecipe.Title,
+                Description = existingRecipe.Description,
+                Instructions = existingRecipe.Instructions,
+                PrepTime = existingRecipe.PrepTime,
+                CookTime = existingRecipe.CookTime,
+                TotalTime = existingRecipe.TotalTime,
+                Servings = existingRecipe.Servings,
+                Image = existingRecipe.Image,
+                CategoryId = existingRecipe.CategoryId,
+                Ingredients = existingRecipe.RecipeIngredients.Select(ri => new IngredientViewModel
+                {
+                    Id = ri.Ingredient!.Id,
+                    Name = ri.Ingredient.Name,
+                    Quantity = ri.IngredientQuanitity,
+                }).ToList()
+            };
+
+            var categories = await _context.Categories.ToListAsync();
+            ViewBag.CategoryId = new SelectList(categories, "Id", "Name", existingRecipe.CategoryId);
+            return View(editViewModel);
         }
+
 
         // POST: Admin/Recipes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Title,Description,Instructions,PrepTime,CookTime,TotalTime,Servings,Image,CategoryId")] Recipe recipe)
+        public async Task<IActionResult> Edit(EditRecipeViewModel model)
         {
-            if (id != recipe.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var existingRecipe = await _context.Recipes
+                    .Include(r => r.RecipeIngredients)
+                    .FirstOrDefaultAsync(r => r.Id == model.Id);
+
+                if (existingRecipe == null)
                 {
-                    _context.Update(recipe);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                existingRecipe.Title = model.Title;
+                existingRecipe.Description = model.Description;
+                existingRecipe.Instructions = model.Instructions;
+                existingRecipe.PrepTime = model.PrepTime;
+                existingRecipe.CookTime = model.CookTime;
+                existingRecipe.TotalTime = model.TotalTime;
+                existingRecipe.Servings = model.Servings;
+                existingRecipe.Image = model.Image;
+                existingRecipe.CategoryId = model.CategoryId;
+
+                existingRecipe.RecipeIngredients.Clear();
+                foreach (var ingredientViewModel in model.Ingredients!)
                 {
-                    if (!RecipeExists(recipe.Id))
+                    var ingredient = new Ingredient
                     {
-                        return NotFound();
-                    }
-                    else
+                        Id = ingredientViewModel.Id,
+                        Name = ingredientViewModel.Name
+                    };
+
+                    existingRecipe.RecipeIngredients.Add(new RecipeIngredients
                     {
-                        throw;
-                    }
+                        RecipeId = existingRecipe.Id,
+                        Ingredient = ingredient,
+                        IngredientQuanitity = ingredientViewModel.Quantity
+                    });
                 }
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
+            var categories = await _context.Categories.ToListAsync();
+            ViewBag.CategoryId = new SelectList(categories, "Id", "Name", model.CategoryId);
+            return View(model);
         }
 
         // GET: Admin/Recipes/Delete/5

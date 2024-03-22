@@ -37,7 +37,9 @@
                                 <div class="card--sub">
                                     @recipe.Description
                                 </div>
-                                <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
+                                </div>
                             </div>
                         </div>
                     }

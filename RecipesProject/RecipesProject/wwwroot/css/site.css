@@ -53,3 +53,7 @@ header{
 .recipe-item:hover a{
     color: #ffffff !important;
 }
+.navbar-brand-img {
+    max-width: 100px;
+    height: auto;
+}

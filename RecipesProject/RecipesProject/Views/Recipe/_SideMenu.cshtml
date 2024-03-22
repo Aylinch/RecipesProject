@@ -1,8 +1,8 @@
 ﻿@model RecipesProject.Models.RecipeViewModels.FilterViewModel
-<form asp-controller="Recipe" asp-action="Filter" method="get">
+<form asp-controller="Recipe" asp-action="Filter" method="get" class="my-4">
 
     <div class="mb-3">
-        <label>Time for cook:</label><br>
+        <label>Time for cooking:</label><br>
         <div class="form-check form-check-inline">
             <input asp-for="@Model.TimeFilter" class="form-check-input" type="radio" id="short" value="short">
             <label class="form-check-label" for="short">Short</label>
@@ -21,32 +21,33 @@
         <label>Meals:</label><br>
         <div class="form-check form-check-inline">
             <input asp-for="@Model.IngredientFilter" class="form-check-input" type="radio" id="chicken" value="chicken">
-            <label class="form-check-label" for="chicken">Meals with chicken</label>
+            <label class="form-check-label" for="chicken">Chicken</label>
         </div>
         <div class="form-check form-check-inline">
             <input asp-for="@Model.IngredientFilter" class="form-check-input" type="radio" id="pork" value="pork">
-            <label class="form-check-label" for="pork">Meals with pork</label>
+            <label class="form-check-label" for="pork">Pork</label>
         </div>
         <div class="form-check form-check-inline">
             <input asp-for="@Model.IngredientFilter" class="form-check-input" type="radio" id="beef" value="beef">
-            <label class="form-check-label" for="beef">Meals with beef</label>
+            <label class="form-check-label" for="beef">Beef</label>
         </div>
          <div class="form-check form-check-inline">
-            <input asp-for="@Model.IngredientFilter" class="form-check-input" type="radio" id="pasta" value="spaghetti">
-            <label class="form-check-label" for="spaghetti">Pasta</label>
+            <input asp-for="@Model.IngredientFilter" class="form-check-input" type="radio" id="pasta" value="pasta">
+            <label class="form-check-label" for="pasta">Pasta</label>
         </div>
     </div>
     
     <div class="mb-3">
         <label for="servings">Number of servings:</label>
-        <input  asp-for="@Model.ServingsFilter" type="number" id="servings" value="@Model.ServingsFilter" />
+        <input asp-for="@Model.ServingsFilter" type="number" id="servings" class="form-control" value="@Model.ServingsFilter" />
     </div>
     
     <div class="mb-3">
         <label for="ingredient">Ingredient:</label>
-        <input type="text" id="ingredient" name="IngredientFilter" value="@Model.IngredientFilter" />
+        <input type="text" id="ingredient" name="IngredientFilter" class="form-control" value="@Model.IngredientFilter" />
     </div>
 
+    <button type="submit" class="btn btn-success">Apply filters</button>
 
-    <button type="submit" class="btn btn-primary">Apply filters</button>
+    <div class="mb-3"></div>
 </form>

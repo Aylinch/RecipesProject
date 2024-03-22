@@ -78,14 +78,15 @@ figcaption {
     padding: 10px 10px;
     font-size: 24px;
     color: white;
-    background-color: #ff6347;
+    background-color: #a4161a;
     margin: 0;
 }
 
 .sub-title {
     font-size: 20px;
     padding: 10px 10px;
-    background-color: #ff6347;
+    background-color: #a4161a;
+    ;
     color: white;
     text-align: center;
 }
@@ -167,7 +168,7 @@ figcaption {
         .instructions > li:before {
             content: "." counter(my-awesome-counter);
             display: inline-block;
-            color: #ff6347;
+            color: #ff1448 ;
             padding: 5px;
             margin: 5px;
             font-style: italic;

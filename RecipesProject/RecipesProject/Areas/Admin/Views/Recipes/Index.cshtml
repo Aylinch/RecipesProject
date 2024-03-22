@@ -46,9 +46,17 @@
                                 <img src="@Url.Content(item.Image)" alt="Recipe Image" style="max-width: 200px; max-height: 200px;" />
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                <a href="#acceptEmployeeModal" class="accept" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Accept">&#xE5CA;</i></a>
+                                <a href="@Url.Action("Edit", "Recipes", new { id = item.Id })" class="edit" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                                </a>
+
+                                <a asp-action="Delete" asp-route-id="@item.Id" href="#deleteEmployeeModal" class="delete" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                </a>
+
+                                <a asp-action="Accept" asp-route-id="@item.Id" href="#acceptEmployeeModal" class="accept" data-toggle="modal">
+                                    <i class="material-icons" data-toggle="tooltip" title="Accept">&#xE5CA;</i>
+                                </a>
                             </td>
                         </tr>
                     }
