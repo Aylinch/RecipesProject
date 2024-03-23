@@ -38,9 +38,9 @@
                             <a class="nav-link text-pink fw-bold" asp-area="" asp-controller="Recipe" asp-action="AddRecipe">Add</a>
                         </li>
                         <li class="nav-item">
-                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+                            @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin")))
                             {
-                                <a class="nav-link text-pink fw-bold" asp-area="Admin" asp-controller="Recipes" asp-action="Index">Admin</a>
+                                    <a class="nav-link text-pink fw-bold" asp-area="Admin" asp-controller="Recipes" asp-action="Index">Admin</a>
                             }
                         </li>
                     </ul>

@@ -128,19 +128,19 @@ namespace RecipesProject.Services
             }
             return recipes.Select(recipe =>
                  new RecipeViewModel
-               {
-           Id = recipe.Id,
-           Title = recipe.Title,
-           Description = recipe.Description,
-           Instructions = recipe.Instructions,
-           PrepTime = recipe.PrepTime,
-           CookTime = recipe.CookTime,
-           TotalTime = recipe.TotalTime,
-           Servings = recipe.Servings,
-           Image = recipe.Image,
-           CategoryId = recipe.CategoryId,
-           RecipeIngredients = recipe.RecipeIngredients,
-       }).ToList();
+                 {
+                     Id = recipe.Id,
+                     Title = recipe.Title,
+                     Description = recipe.Description,
+                     Instructions = recipe.Instructions,
+                     PrepTime = recipe.PrepTime,
+                     CookTime = recipe.CookTime,
+                     TotalTime = recipe.TotalTime,
+                     Servings = recipe.Servings,
+                     Image = recipe.Image,
+                     CategoryId = recipe.CategoryId,
+                     RecipeIngredients = recipe.RecipeIngredients,
+                 }).ToList();
         }
 
     }

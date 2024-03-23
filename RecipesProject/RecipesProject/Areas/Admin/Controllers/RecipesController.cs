@@ -97,8 +97,9 @@ namespace RecipesProject.Areas.Admin.Controllers
                 Servings = existingRecipe.Servings,
                 Image = existingRecipe.Image,
                 CategoryId = existingRecipe.CategoryId,
-                Ingredients = existingRecipe.RecipeIngredients.Select(ri => new IngredientViewModel
+                Ingredients = existingRecipe.RecipeIngredients.Select((ri, index) => new IngredientViewModel
                 {
+                    Index = index,
                     Id = ri.Ingredient!.Id,
                     Name = ri.Ingredient.Name,
                     Quantity = ri.IngredientQuanitity,

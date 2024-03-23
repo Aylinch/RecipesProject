@@ -50,7 +50,7 @@
                                     <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                                 </a>
 
-                                <a asp-action="Delete" asp-route-id="@item.Id" href="#deleteEmployeeModal" class="delete" data-toggle="modal">
+                                <a href="@Url.Action("Delete", "Recipes", new{id=item.Id})" class="delete" data-toggle="modal">
                                     <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                                 </a>
 
@@ -62,6 +62,9 @@
                     }
                 </tbody>
             </table>
+            <form action="/Home/Index" method="get">
+                <button type="submit" class="btn btn-primary btn-success">Go to home page</button>
+            </form>
         </div>
     </div>
 </body>

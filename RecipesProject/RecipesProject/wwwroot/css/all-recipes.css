@@ -1,10 +1,8 @@
-﻿/* Global Styles */
+﻿
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&display=swap');
 
-/* Card Styles */
 .card-container {
     display: flex;
-    align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }
@@ -49,7 +47,6 @@
     margin-bottom: 40px;
 }
 
-/* Call-to-Action Button Styles */
 .cta {
     justify-self: flex-end;
     text-decoration: none;
