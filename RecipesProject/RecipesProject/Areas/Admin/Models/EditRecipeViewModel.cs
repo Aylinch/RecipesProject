@@ -1,4 +1,5 @@
-﻿using RecipesProject.Models.RecipeViewModels;
+﻿using RecipesProject.Models;
+using RecipesProject.Models.RecipeViewModels;
 
 namespace RecipesProject.Areas.Admin.Models
 {
@@ -14,6 +15,8 @@ namespace RecipesProject.Areas.Admin.Models
         public int Servings { get; set; }
         public string? Image { get; set; }
         public Guid? CategoryId { get; set; }
+        public List<CategoryViewModel>? Categories { get; set; }
         public List<IngredientViewModel>? Ingredients { get; set; }
+        public string? CategoryName { get; internal set; }
     }
 }

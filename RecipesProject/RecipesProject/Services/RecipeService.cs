@@ -87,7 +87,7 @@ namespace RecipesProject.Services
             var ingredients = model.IngredientFilter;
             var time = model.TimeFilter;
             var recipes = await dbContext.Recipes.Include(x => x.Category).Include(x => x.RecipeIngredients).ThenInclude(x => x.Ingredient).ToListAsync();
-            if (servings != null)
+            if (servings != 0)
             {
                 recipes = recipes.Where(x => x.Servings == servings).ToList();
             }
@@ -95,19 +95,19 @@ namespace RecipesProject.Services
             {
                 if (ingredients == "chicken")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name!.Contains("chicken"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name!.Contains("chicken"))).ToList();
                 }
                 if (ingredients == "beef")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("beef"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("beef"))).ToList();
                 }
                 if (ingredients == "pork")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("pork"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("pork"))).ToList();
                 }
                 if (ingredients == "pork")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient != null && x.Ingredient.Name.Contains("spaghetti"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("spaghetti"))).ToList();
                 }
 
             }

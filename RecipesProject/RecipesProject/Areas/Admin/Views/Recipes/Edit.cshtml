@@ -1,6 +1,9 @@
-﻿<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-@using RecipesProject.Areas.Admin.Models
+﻿@using RecipesProject.Areas.Admin.Models
 @model EditRecipeViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "../Shared/_Layout.cshtml";
+}
 
 <div class="container">
     <div class="row justify-content-center">
@@ -9,7 +12,7 @@
                 <div class="card-header bg-success text-white">Edit Recipe</div>
 
                 <div class="card-body">
-                    <form asp-action="Edit" method="post">
+                    <form asp-action="Edit" method="post" asp-area="Admin" asp-controller="Recipes">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="form-group">
@@ -62,7 +65,13 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="CategoryId" class="form-label fw-bold">Category</label>
-                            <select class="form-control" asp-for="CategoryId" asp-items="@ViewBag.CategorySelectList" aria-required="true"></select>
+                            <select class="form-control" asp-for="CategoryId" aria-required="true">
+                                <option>@Model.CategoryName</option>
+                                @foreach(var c in Model.Categories)
+                                {
+                                    <option value="@c.Id">@c.Name</option>
+                                }
+                            </select>
                             <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
                         <div class="form-group mt-4">
@@ -87,25 +96,21 @@
     </div>
 </div>
 @section Scripts {
-    <script>
-        $(function () {
-            $('#addIngredient').click(function () {
-                var index = $('.ingredient').length;
-                var newIngredient = $('<div class="ingredient">' +
-                    '<input type="text" name="Ingredients[' + index + '].Name" class="form-control mb-2" placeholder="Ingredient name:" required>' +
-                    '<input type="text" name="Ingredients[' + index + '].Quantity" class="form-control" placeholder="Quantity:" required>' +
-                    '<button type="button" class="btn btn-danger btn-sm remove-ingredient">Remove Ingredient</button>' +
-                    '</div>');
-                $('#ingredients').append(newIngredient);
-            });
-
-            $(document).on('click', '.remove-ingredient', function () {
-                $(this).closest('.ingredient').remove();
-            });
+<script>
+    $(function () {
+        $('#addIngredient').click(function () {
+            var index = $('.ingredient').length;
+            var newIngredient = $('<div class="ingredient">' +
+                '<input type="text" name="Ingredients[' + index + '].Name" class="form-control mb-2" placeholder="Ingredient name:" required>' +
+                '<input type="text" name="Ingredients[' + index + '].Quantity" class="form-control" placeholder="Quantity:" required>' +
+                '<button type="button" class="btn btn-danger btn-sm remove-ingredient">Remove Ingredient</button>' +
+                '</div>');
+            $('#ingredients').append(newIngredient);
         });
-    </script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/jquery-ui.min.js"></script>
+
+        $(document).on('click', '.remove-ingredient', function () {
+            $(this).closest('.ingredient').remove();
+        });
+    });
+</script>
 }

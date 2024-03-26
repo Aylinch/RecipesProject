@@ -15,7 +15,7 @@
 <body>
        <header class="position-sticky top-0">
          <nav class="navbar navbar-expand-sm navbar-light bg-white navbar-toggleable-sm border-bottom box-shadow mb-3">
-        <div class="container-fluid justify-content-center"
+        <div class="container-fluid justify-content-center">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/navbarimage/carmie-s-kitchen-recipe-picture.webp" alt="RecipesProject Logo" class="img-fluid navbar-brand-img">
                 </a>
@@ -40,7 +40,7 @@
                         <li class="nav-item">
                             @if (User.Identity!.IsAuthenticated && (User.IsInRole("Admin")))
                             {
-                                    <a class="nav-link text-pink fw-bold" asp-area="Admin" asp-controller="Recipes" asp-action="Index">Admin</a>
+                                <a class="nav-link text-pink fw-bold" asp-area="Admin" asp-controller="Recipes" asp-action="Index">Admin</a>
                             }
                         </li>
                     </ul>

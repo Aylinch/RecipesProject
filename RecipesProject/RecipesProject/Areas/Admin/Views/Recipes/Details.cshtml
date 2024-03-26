@@ -1,73 +1,53 @@
 ﻿@model RecipesProject.Data.Entities.Recipe
-
 @{
     ViewData["Title"] = "Details";
-    Layout = "../../../../Views/Shared/_Layout.cshtml";
+    Layout = "../Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <h1>Recipe Details</h1>
 
-<div>
-    <h4>Recipe</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Instructions)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Instructions)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrepTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrepTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CookTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CookTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TotalTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Servings)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Servings)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="confirmation-message">
+        <h3>Do you want to accept this recipe?</h3>
+        <div class="delete-form">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-success">Accept</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="recipe-details">
+        <h4>Recipe Details</h4>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-2">Title:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
+
+            <dt class="col-sm-2">Description:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt class="col-sm-2">Instructions:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Instructions)</dd>
+
+            <dt class="col-sm-2">Preparation Time:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.PrepTime) min</dd>
+
+            <dt class="col-sm-2">Cook Time:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.CookTime) min</dd>
+
+            <dt class="col-sm-2">Total Time:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.TotalTime) min</dd>
+
+            <dt class="col-sm-2">Servings:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Servings)</dd>
+
+            <dt class="col-sm-2">Category:</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Category!.Name)</dd>
+
+            <dt class="col-sm-2">Image:</dt>
+            <dd class="col-sm-10"><img src="@Html.DisplayFor(model => model.Image)" alt="Recipe Image" style="max-width: 200px; height: auto;" /></dd>
+        </dl>
+    </div>
 </div>

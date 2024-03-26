@@ -1,13 +1,30 @@
-﻿@using RecipesProject.Models.RecipeViewModels
+﻿@using Newtonsoft.Json
+@using RecipesProject.Models.RecipeViewModels
 @model List<RecipeViewModel>
 @{
     ViewData["Title"] = "Recipe";
 }
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="~/css/all-recipes.css">
+
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
-            @await Html.PartialAsync("_SearchBar")
+            <div class="shadow rounded">
+                <div class="p-2" style="margin-left:10px">
+                    <form id="recipeForm" autocomplete="off">
+                        <div class="mb-2 row">
+                            <div class="col-11 text-center ui-widget p-1">
+                                <input type="text" id="tags" placeholder="Search Recipe" class="form-control" name="recipe" />
+                            </div>
+                            <div class="col-1 p-1">
+                                <button type="submit" class="btn btn-sm btn-success p-2">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -15,16 +32,15 @@
             <div class="shadow rounded">
                 <div class="border-bottom border-3 p-2">
                     <h4 class="text-pink text-center fst-italic">Recipes</h4>
-
-                    @await Html.PartialAsync("_SideMenu",new RecipesProject.Models.RecipeViewModels.FilterViewModel())
+                    @await Html.PartialAsync("_SideMenu", new FilterViewModel())
                 </div>
             </div>
         </div>
         <div class="col-10">
             <div class="card-container">
-                @if (Model!.Any())
+                @if (Model.Any())
                 {
-                    @foreach (var recipe in Model!)
+                    @foreach (var recipe in Model)
                     {
                         <div class="card">
                             <div class="card--img">
@@ -52,3 +68,22 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script>
+    $(function() {
+        var availableTags = @Html.Raw(JsonConvert.SerializeObject(Model.Select(r => r.Title)));
+
+        $("#tags").autocomplete({
+            source: availableTags,
+            minLength: 2
+        });
+
+        $("#recipeForm").submit(function(event) {
+            event.preventDefault();
+            var searchText = $("#tags").val();
+            console.log("Searching for:", searchText);
+        });
+    });
+</script>

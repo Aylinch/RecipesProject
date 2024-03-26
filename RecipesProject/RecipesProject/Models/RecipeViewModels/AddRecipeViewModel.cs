@@ -22,7 +22,6 @@ namespace RecipesProject.Models.RecipeViewModels
         [Required]
         public string? Image { get; set; }
         public Guid? CategoryId { get; set; }    
-        
         public List<IngredientViewModel>?Ingredients { get; set; }  
     }
 }
