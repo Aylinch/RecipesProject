@@ -1,4 +1,5 @@
-﻿using RecipesProject.Data.Entities;
+﻿using RecipesProject.Data.Account;
+using RecipesProject.Data.Entities;
 
 namespace RecipesProject.Models.RecipeViewModels
 {

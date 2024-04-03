@@ -9,8 +9,7 @@ namespace RecipesProject.Data.Entities
         public Guid RecipeId { get; set; }
         public Recipe Recipe { get; set; } = null!;
         [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public User User { get; set; } = null!;
-        public bool IsApproved { get; set; } = false;
     }
 }

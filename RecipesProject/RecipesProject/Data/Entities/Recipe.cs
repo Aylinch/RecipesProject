@@ -18,6 +18,7 @@ namespace RecipesProject.Data.Entities
         public int TotalTime { get; set; }  
         public int Servings { get; set; }   
         public string? Image { get; set; }
+        public bool IsApproved { get; set; } = false;
         public Guid? CategoryId { get; set; } = null;
         public Category? Category { get; set; }
         public HashSet<RecipeIngredients> RecipeIngredients { get; set; } = new HashSet<RecipeIngredients>(); 

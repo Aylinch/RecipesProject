@@ -15,6 +15,7 @@ namespace RecipesProject.Data
         public DbSet<Recipe> Recipes { get; set; }  
         public DbSet<Ingredient> Ingredients { get; set; }  
         public DbSet<Category> Categories { get; set; } 
+        public DbSet<RecipeUser> RecipeUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new CategoryConfiguration());

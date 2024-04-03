@@ -62,5 +62,11 @@ namespace RecipesProject.Controllers
            var recipes = await recipeService.FilterAsync(model);
            return View("AllRecipes", recipes);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetUserRecipes(string userId)
+        {
+            var recipes = await recipeService.GetUserRecipes(userId);
+            return View("UserRecipes", recipes);
+        }
     }
 }

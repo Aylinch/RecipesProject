@@ -12,8 +12,8 @@ using RecipesProject.Data;
 namespace RecipesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240319172028_Seed2")]
-    partial class Seed2
+    [Migration("20240402070647_Initial2")]
+    partial class Initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace RecipesProject.Migrations
                         new
                         {
                             Id = "a6383851-4451-46c9-8d99-252c81e153ee",
-                            ConcurrencyStamp = "12bcd4ba-51e7-4f8a-bf83-e8e26145319a",
+                            ConcurrencyStamp = "40749999-5fa2-4811-8244-4899fe779e61",
                             Name = "Admin"
                         });
                 });
@@ -262,7 +262,7 @@ namespace RecipesProject.Migrations
                             Id = "52ff7a8f-b2b1-4a92-9fa6-92785311d879",
                             AccessFailedCount = 0,
                             Age = 19,
-                            ConcurrencyStamp = "581477bf-9f88-40c3-a999-50b7f6d2be02",
+                            ConcurrencyStamp = "efcd0d2a-5518-4c5d-b1ad-97e36e9d39b9",
                             Email = "limoni@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Simona",
@@ -270,9 +270,9 @@ namespace RecipesProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LIMONI@ABV.BG",
                             NormalizedUserName = "MONIO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEUzUCgJBPhJRdvTjqZsuQwPXLrIUMuckIvx46srSkpNy+8/0b/cKZeciwPg/z4Bkg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPGxeNOJu3q+SxwZGNVvpQVG5FYEuotPpBaJMD0p6f7+Go7IUI7PXcwqY2RT2y3New==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ae6dc982-f143-415a-b378-4f7b89a155e8",
+                            SecurityStamp = "e269f39d-0c5b-4a36-8fad-0e9f3938ce8d",
                             TwoFactorEnabled = false,
                             UserName = "Monio"
                         },
@@ -281,7 +281,7 @@ namespace RecipesProject.Migrations
                             Id = "6b243550-7cc1-4d75-8064-cef4c3d8be35",
                             AccessFailedCount = 0,
                             Age = 20,
-                            ConcurrencyStamp = "881d6cac-f77c-41d6-901b-77f5115f68ac",
+                            ConcurrencyStamp = "061d42eb-6731-4a45-87ac-ed079aa31377",
                             Email = "aylin@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Aylin",
@@ -289,9 +289,9 @@ namespace RecipesProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "AYLIN@ABV.BG",
                             NormalizedUserName = "AYLINN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJFvDpkqHX7XtHxokFKPlsdJZmVrPZKZULDwf2QC9/tGbzPIedHy3huwZQU/zD/XGg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEF7YC92Er6qniTW/74lYLR5cQj4HYjVjNTRrWzyAg9s+QgLlhFO/hqiS+voSpP+nQA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "80ddfc15-da97-4c6a-8f89-83cdbba42b15",
+                            SecurityStamp = "e80ffaf1-d746-450f-be6d-49996be53cb8",
                             TwoFactorEnabled = false,
                             UserName = "Aylinn"
                         });
@@ -359,6 +359,9 @@ namespace RecipesProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -390,6 +393,9 @@ namespace RecipesProject.Migrations
                     b.Property<string>("Instructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PrepTime")
                         .HasColumnType("int");
@@ -437,14 +443,11 @@ namespace RecipesProject.Migrations
                     b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.HasKey("UserId", "RecipeId");
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeUser");
+                    b.ToTable("RecipeUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

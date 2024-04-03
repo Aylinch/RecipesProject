@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RecipesProject.Migrations
 {
-    public partial class RecipeProject : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,8 @@ namespace RecipesProject.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryImage = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,7 +41,8 @@ namespace RecipesProject.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,7 +135,7 @@ namespace RecipesProject.Migrations
                 {
                     RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IngredientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IngredientQuanitity = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    IngredientQuanitity = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -238,24 +240,23 @@ namespace RecipesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeUser",
+                name: "RecipeUsers",
                 columns: table => new
                 {
                     RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeUser", x => new { x.UserId, x.RecipeId });
+                    table.PrimaryKey("PK_RecipeUsers", x => new { x.UserId, x.RecipeId });
                     table.ForeignKey(
-                        name: "FK_RecipeUser_AspNetUsers_UserId",
+                        name: "FK_RecipeUsers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecipeUser_Recipes_RecipeId",
+                        name: "FK_RecipeUsers_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
@@ -263,17 +264,36 @@ namespace RecipesProject.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Name" },
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "a6383851-4451-46c9-8d99-252c81e153ee", "2ba0921a-f640-410a-8a48-3b0bbae9a529", "Admin", null });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "Age", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RecipeId", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("0f340dfe-e181-4001-8e40-1602eacb42f7"), "Apetizer" },
-                    { new Guid("249d47fb-bb25-45c3-bc04-43ccbe4005b6"), "Breakfast" },
-                    { new Guid("748f2fe4-72ae-4663-9c98-52a41c24777f"), "Soup" },
-                    { new Guid("7a378c4d-0abd-41a7-99e7-38d8c62634e8"), "Salad" },
-                    { new Guid("a00aea51-a6de-4d8d-98cf-793508565d64"), "Dessert" },
-                    { new Guid("fbeb2eda-cb06-4592-a156-2db8126bb0d7"), "Main dish " }
+                    { "52ff7a8f-b2b1-4a92-9fa6-92785311d879", 0, 19, "e8759f06-dc7e-46aa-bcb2-5f42ab998ab3", "limoni@abv.bg", false, "Simona", "Palieva", false, null, "LIMONI@ABV.BG", "MONIO", "AQAAAAEAACcQAAAAENByCgiVvSWP8ftgFLjb+WkR8waMpv/rcppsvfF23ifYMo/6TrRYXyKDjxv5jH7DlQ==", null, false, null, "0cb340af-a7e8-4bab-9ce0-491e69282aad", false, "Monio" },
+                    { "6b243550-7cc1-4d75-8064-cef4c3d8be35", 0, 20, "40e3c77c-8727-44cc-b198-795d2afb00ec", "aylin@abv.bg", false, "Aylin", "Chakakchi", false, null, "AYLIN@ABV.BG", "AYLINN", "AQAAAAEAACcQAAAAEHT+8ZC5vgkIbl+QKJrMFuhK36w/Ffb0Vg7JYxrXWxhSe/HPm9Bbs/h3sJ5oLessCA==", null, false, null, "25a957bc-fed0-483c-a9fe-26f9483ae77b", false, "Aylinn" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CategoryImage", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("1f03fbf0-adfa-40fb-bb32-f7944ac4a5cb"), "https://i.pinimg.com/736x/63/2e/07/632e07d2c7c1a33896c9b20e329f32f1.jpg", "Main dishes" },
+                    { new Guid("35964891-362e-401d-ad89-5b9c5a98671f"), "https://th.bing.com/th/id/OIP.2LT7l2oEDjsqW_SCNg4UEQHaFE?rs=1&pid=ImgDetMain", "Salads" },
+                    { new Guid("3fcbca87-d864-4eda-a1c6-217c800dc20d"), "https://th.bing.com/th/id/R.43fec6c14689033a80b3c7ffdfe31aae?rik=SGXteUsTmafgwQ&riu=http%3a%2f%2fweknowyourdreams.com%2fimages%2fsoup%2fsoup-05.jpg&ehk=6IUgafpKHu6FGbvVfwGNtHQoqYQDUQHN24YEPtBAIcI%3d&risl=&pid=ImgRaw&r=0", "Soups" },
+                    { new Guid("663f7ebb-fcfb-4f3e-a1d4-c89f6f9c627f"), "https://cdn.momsdish.com/wp-content/uploads/2020/06/Classic-Bruschetta-Recipe-09-scaled.jpg", "Appetizers" },
+                    { new Guid("b565b246-8790-4dba-9aa8-580ea1077982"), "https://th.bing.com/th/id/R.561af1c6a2e6985609dd071112475a76?rik=V%2bJAoJ4hV%2fq%2fow&pid=ImgRaw&r=0", "Desserts" },
+                    { new Guid("ecb1fbcd-7e68-46b3-bff1-1fa2de282e8b"), "https://www.skygate.co.jp/guide/wp-content/uploads/sites/2/2017/03/1703_006-1-768x471.jpg", "Breakfast" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "a6383851-4451-46c9-8d99-252c81e153ee", "6b243550-7cc1-4d75-8064-cef4c3d8be35" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -330,8 +350,8 @@ namespace RecipesProject.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeUser_RecipeId",
-                table: "RecipeUser",
+                name: "IX_RecipeUsers_RecipeId",
+                table: "RecipeUsers",
                 column: "RecipeId");
         }
 
@@ -356,7 +376,7 @@ namespace RecipesProject.Migrations
                 name: "RecipeIngredients");
 
             migrationBuilder.DropTable(
-                name: "RecipeUser");
+                name: "RecipeUsers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

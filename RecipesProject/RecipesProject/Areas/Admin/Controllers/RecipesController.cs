@@ -26,7 +26,9 @@ namespace RecipesProject.Areas.Admin.Controllers
         // GET: Admin/Recipes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Recipes.Include(r => r.Category);
+            var applicationDbContext = _context.Recipes
+                .Where(r => r.IsApproved == false)
+                .Include(r => r.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -78,7 +80,7 @@ namespace RecipesProject.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var existingRecipe = await _context.Recipes
-                .Include(c=> c.Category)
+                .Include(c => c.Category)
                 .Include(r => r.RecipeIngredients)
                     .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefaultAsync(r => r.Id == id);
@@ -124,7 +126,7 @@ namespace RecipesProject.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute]Guid id, EditRecipeViewModel model)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, EditRecipeViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -207,12 +209,23 @@ namespace RecipesProject.Areas.Admin.Controllers
             _context.Recipes.Remove(recipe);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index"); ;
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ApproveRecipe(Guid id)
+        {
+            var recipe = await _context.Recipes.FindAsync(id);
+            if (recipe != null)
+            {
+                recipe.IsApproved = true;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
         }
 
         private bool RecipeExists(Guid id)
         {
-          return (_context.Recipes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Recipes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

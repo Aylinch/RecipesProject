@@ -9,5 +9,6 @@ namespace RecipesProject.Contracts
         Task AddRecipe(AddRecipeViewModel model);
         Task<Recipe> GetRecipeByIdAsync(Guid id);
         Task<List<RecipeViewModel>> FilterAsync(FilterViewModel model);
+        Task<List<RecipeViewModel>> GetUserRecipes(string userId);
     }
 }

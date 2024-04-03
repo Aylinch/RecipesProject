@@ -9,8 +9,8 @@
 
     <div class="confirmation-message">
         <h3>Do you want to accept this recipe?</h3>
-        <div class="delete-form">
-            <form asp-action="Delete">
+        <div class="accept-form">
+            <form  asp-area="Admin" asp-action="ApproveRecipe" asp-controller="Recipes" method="post">
                 <input type="hidden" asp-for="Id" />
                 <button type="submit" class="btn btn-success">Accept</button>
             </form>

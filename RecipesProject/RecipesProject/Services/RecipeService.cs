@@ -19,6 +19,7 @@ namespace RecipesProject.Services
         public async Task<List<RecipeViewModel>> AllAsync()
         {
             var recipes = await dbContext.Recipes
+                .Where(r => r.IsApproved == true)
                 .Select(recipe => new RecipeViewModel()
                 {
                     Id = recipe.Id,
@@ -53,6 +54,7 @@ namespace RecipesProject.Services
                 Servings = model.Servings,
                 Image = model.Image,
                 CategoryId = model.CategoryId,
+                IsApproved = false
             };
             await dbContext.Recipes.AddAsync(recipe);
             foreach (var ingredientViewModel in model.Ingredients)
@@ -141,6 +143,29 @@ namespace RecipesProject.Services
                      CategoryId = recipe.CategoryId,
                      RecipeIngredients = recipe.RecipeIngredients,
                  }).ToList();
+        }
+
+        public async Task<List<RecipeViewModel>> GetUserRecipes(string userId)
+        {
+            var userRecipes = await dbContext.RecipeUsers
+                   .Where(x => x.UserId == userId)
+                   .Include(r => r.Recipe)
+
+                   .Select(r => new RecipeViewModel
+                   {
+                       Id = r.Recipe.Id,
+                       Title = r.Recipe.Title,
+                       Description = r.Recipe.Description,
+                       Instructions = r.Recipe.Instructions,
+                       PrepTime = r.Recipe.PrepTime,
+                       CookTime = r.Recipe.CookTime,
+                       TotalTime = r.Recipe.TotalTime,
+                       CategoryId = r.Recipe.CategoryId,
+                       RecipeIngredients = r.Recipe.RecipeIngredients,
+                   })
+                   .ToListAsync();
+
+            return userRecipes;
         }
 
     }
