@@ -144,7 +144,7 @@ namespace RecipesProject.Services
                      RecipeIngredients = recipe.RecipeIngredients,
                  }).ToList();
         }
-
+        
         public async Task<List<RecipeViewModel>> GetUserRecipes(string userId)
         {
             var userRecipes = await dbContext.RecipeUsers

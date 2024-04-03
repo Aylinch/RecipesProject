@@ -57,10 +57,18 @@ namespace RecipesProject.Controllers
         }
   
         [HttpGet]
-        public async Task<IActionResult> Filter(FilterViewModel model)
+        public async Task<IActionResult> Filter(FilterViewModel model)  
         {
            var recipes = await recipeService.FilterAsync(model);
            return View("AllRecipes", recipes);
+        }
+        [HttpGet]
+        public  async Task<IActionResult> RemoveFilters(FilterViewModel model)
+        {
+            model.ServingsFilter = 0;
+            model.IngredientFilter = "";
+            model.TimeFilter = "";
+            return RedirectToAction("AllRecipes");
         }
         [HttpGet]
         public async Task<IActionResult> GetUserRecipes(string userId)
