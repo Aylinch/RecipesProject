@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RecipesProject.Contracts;
 using RecipesProject.Models;
 using System.Diagnostics;
 
@@ -6,16 +7,18 @@ namespace RecipesProject.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IRecipeService recipeService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IRecipeService recipeService)
         {
+            this.recipeService = recipeService;
             _logger = logger;
         }
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await this.recipeService.TodaySpacial();
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -1,5 +1,6 @@
 ﻿using RecipesProject.Data.Account;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecipesProject.Data.Entities
 {
@@ -21,8 +22,11 @@ namespace RecipesProject.Data.Entities
         public bool IsApproved { get; set; } = false;
         public Guid? CategoryId { get; set; } = null;
         public Category? Category { get; set; }
-        public HashSet<RecipeIngredients> RecipeIngredients { get; set; } = new HashSet<RecipeIngredients>(); 
-        public HashSet<User>Users { get; set; }=new HashSet<User>();            
 
+        [ForeignKey(nameof(User))]
+        public string CreatorId { get; set; }
+        public User User { get; set; } = null!;
+        public HashSet<RecipeIngredients> RecipeIngredients { get; set; } = new HashSet<RecipeIngredients>(); 
+        
     }
 }

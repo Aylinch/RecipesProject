@@ -40,7 +40,7 @@ namespace RecipesProject.Services
         }
 
 
-        public async Task AddRecipe(AddRecipeViewModel model)
+        public async Task AddRecipe(AddRecipeViewModel model,string userId)
         {
             var recipe = new Recipe
             {
@@ -54,7 +54,8 @@ namespace RecipesProject.Services
                 Servings = model.Servings,
                 Image = model.Image,
                 CategoryId = model.CategoryId,
-                IsApproved = false
+                IsApproved = false,
+                CreatorId= userId
             };
             await dbContext.Recipes.AddAsync(recipe);
             foreach (var ingredientViewModel in model.Ingredients)
@@ -144,28 +145,50 @@ namespace RecipesProject.Services
                      RecipeIngredients = recipe.RecipeIngredients,
                  }).ToList();
         }
-        
+
         public async Task<List<RecipeViewModel>> GetUserRecipes(string userId)
         {
-            var userRecipes = await dbContext.RecipeUsers
-                   .Where(x => x.UserId == userId)
-                   .Include(r => r.Recipe)
-
+            var userRecipes = await dbContext.Recipes
+                   .Where(x => x.CreatorId == userId)
                    .Select(r => new RecipeViewModel
                    {
-                       Id = r.Recipe.Id,
-                       Title = r.Recipe.Title,
-                       Description = r.Recipe.Description,
-                       Instructions = r.Recipe.Instructions,
-                       PrepTime = r.Recipe.PrepTime,
-                       CookTime = r.Recipe.CookTime,
-                       TotalTime = r.Recipe.TotalTime,
-                       CategoryId = r.Recipe.CategoryId,
-                       RecipeIngredients = r.Recipe.RecipeIngredients,
+                       Id = r.Id,
+                       Title = r.Title,
+                       Description = r.Description,
+                       Instructions = r.Instructions,
+                       PrepTime = r.PrepTime,
+                       CookTime = r.CookTime,
+                       Image = r.Image,
+                       TotalTime = r.TotalTime,
+                       CategoryId = r.CategoryId,
+                       RecipeIngredients = r.RecipeIngredients,
                    })
                    .ToListAsync();
 
             return userRecipes;
+        }
+        public async Task<List<RecipeViewModel>>TodaySpacial()
+        {
+            var recipes = await dbContext.Recipes
+                .Where(r => r.IsApproved == true)
+                .Select(recipe => new RecipeViewModel()
+                {
+                    Id = recipe.Id,
+                    Title = recipe.Title,
+                    Description = recipe.Description,
+                    Instructions = recipe.Instructions,
+                    PrepTime = recipe.PrepTime,
+                    CookTime = recipe.CookTime,
+                    TotalTime = recipe.TotalTime,
+                    Servings = recipe.Servings,
+                    Image = recipe.Image,
+                    CategoryId = recipe.CategoryId,
+                    RecipeIngredients = recipe.RecipeIngredients,
+
+                })
+                .Take(4)
+                .ToListAsync();
+            return recipes;
         }
 
     }

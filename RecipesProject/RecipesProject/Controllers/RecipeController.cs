@@ -4,6 +4,7 @@ using RecipesProject.Contracts;
 using RecipesProject.Data;
 using RecipesProject.Data.Entities;
 using RecipesProject.Models.RecipeViewModels;
+using System.Security.Claims;
 
 namespace RecipesProject.Controllers
 {
@@ -37,7 +38,9 @@ namespace RecipesProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                await recipeService.AddRecipe(model);
+                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                await recipeService.AddRecipe(model, userId);
                 return RedirectToAction("Index", "Home");
             }
             return View("AllRecipes", model);
@@ -57,7 +60,7 @@ namespace RecipesProject.Controllers
         }
   
         [HttpGet]
-        public async Task<IActionResult> Filter(FilterViewModel model)  
+        public async Task<IActionResult> Filter(FilterViewModel model,)  
         {
            var recipes = await recipeService.FilterAsync(model);
            return View("AllRecipes", recipes);
@@ -71,8 +74,9 @@ namespace RecipesProject.Controllers
             return RedirectToAction("AllRecipes");
         }
         [HttpGet]
-        public async Task<IActionResult> GetUserRecipes(string userId)
+        public async Task<IActionResult> GetUserRecipes()
         {
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var recipes = await recipeService.GetUserRecipes(userId);
             return View("UserRecipes", recipes);
         }

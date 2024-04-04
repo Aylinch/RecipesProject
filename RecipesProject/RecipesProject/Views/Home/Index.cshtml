@@ -1,4 +1,6 @@
-﻿@{
+﻿@using RecipesProject.Models.RecipeViewModels
+@model List<RecipeViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 <link rel="stylesheet" href="~/css/index-cards.css">
@@ -48,40 +50,23 @@
         </div>
     </div>
     <div class="wrapper">
-        <div class="card shadow rounded">
-            <div class="card__body">
-                <img src="https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=400&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE0NTg5fQ" class="card__image">
-                <h2 class="card__title">The Everyday Salad</h2>
-                <p class="card__description">Take your boring salads up a knotch. This recipe is perfect for lunch and only contains 5 ingredients!</p>
-            </div>
-            <button class="card__btn">View Recipe</button>
-        </div>
-        <div class="card shadow rounded">
-            <div class="card__body">
-                <img src="https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=400&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE0NTg5fQ" class="card__image">
-                <h2 class="card__title">The Everyday Salad</h2>
-                <p class="card__description">Take your boring salads up a knotch. This recipe is perfect for lunch and only contains 5 ingredients!</p>
-            </div>
-            <button class="card__btn">View Recipe</button>
-        </div>
+        @if (Model.Any())
+        {
+            @foreach (var recipe in Model)
+            {
+                <div class="card shadow rounded">
+                    <div class="card__body">
+                        <img src="@recipe.Image" class="card__image">
+                        <h2 class="card__title">@recipe.Title</h2>
+                        <p class="card__description">@recipe.Description</p>
+                    </div>
+                    <form method="get">
+                    <button asp-route-id="@recipe.Id" asp-action="GetRecipeById" asp-controller="Recipe" class="card__btn">View Recipe</button>
+                </form>
+                </div>
+            }
 
-        <div class="card shadow rounded">
-            <div class="card__body">
-                <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-1.2.1&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb&amp;ixid=eyJhcHBfaWQiOjE0NTg5fQ" class="card__image">
-                <h2 class="card__title">Simple Risotto</h2>
-                <p class="card__description">Fear Risotto no more! This simple recipe is perfect for family dinners.</p>
-            </div>
-            <button class="card__btn">View Recipe</button>
-        </div>
-
-        <div class="card shadow rounded">
-            <div class="card__body">
-                <img src="https://images.unsplash.com/photo-1529928520614-7c76e2d99740?ixlib=rb-1.2.1&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=400&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjE0NTg5fQ" class="card__image">
-                <h2 class="card__title">Baked Cod with Vegetables</h2>
-                <p class="card__description">Baked Cod with Vegetables. 30 minute meal!</p>
-            </div>
-            <button class="card__btn">View Recipe</button>
-        </div>
+        }
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

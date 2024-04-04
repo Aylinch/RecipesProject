@@ -4,13 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RecipesProject.Data.Account
 {
-    public class User:IdentityUser  
+    public class User : IdentityUser
     {
-        public HashSet<RecipeUser> RecipeUsers { get; set; }  = new HashSet<RecipeUser>();    
+
+
         [Required]
-        public string? FirstName { get; set; }   
+        public string? FirstName { get; set; }
         [Required]
-        public string? LastName { get; set; }    
-        public int Age { get; set; }    
+        public string? LastName { get; set; }
+        public int Age { get; set; }
+
+        public HashSet<Recipe> Recipes { get; set; } = new HashSet<Recipe>();
     }
 }

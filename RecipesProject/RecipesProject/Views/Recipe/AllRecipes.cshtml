@@ -13,7 +13,7 @@
         <div class="col-12">
             <div class="shadow rounded">
                 <div class="p-2" style="margin-left:10px">
-                    <form id="recipeForm" autocomplete="off">
+                    <form asp-controller="Recipe" asp-action="Filter" method="get" id="recipeForm" autocomplete="off">
                         <div class="mb-2 row">
                             <div class="col-11 text-center ui-widget p-1">
                                 <input type="text" id="tags" placeholder="Search Recipe" class="form-control" name="recipe" />
