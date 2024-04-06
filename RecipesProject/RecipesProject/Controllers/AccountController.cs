@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipesProject.Data.Account;
+using RecipesProject.Extensions;
 using RecipesProject.Models;
 
 namespace RecipesProject.Controllers
@@ -87,6 +88,53 @@ namespace RecipesProject.Controllers
                 }
             }
             ModelState.AddModelError("", "Invalid login");
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUserId = this.User.Id();
+            var currentUser = await userManager.FindByIdAsync(currentUserId);
+            MyProfileViewModel viewModel = new MyProfileViewModel()
+            {
+                FirstName = currentUser.FirstName,
+                LastName = currentUser.LastName,
+                Email = currentUser.Email,
+                UserName = currentUser.UserName,
+                Age = currentUser.Age,
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(MyProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var currentUserId = this.User.Id();
+            var currentUser = await userManager.FindByIdAsync(currentUserId);
+
+            currentUser.FirstName = model.FirstName;
+            currentUser.LastName = model.LastName;
+            currentUser.Email = model.Email;
+            currentUser.UserName = model.UserName;
+            currentUser.Age = model.Age;
+
+            var result = await userManager.UpdateAsync(currentUser);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
             return View(model);
         }
     }

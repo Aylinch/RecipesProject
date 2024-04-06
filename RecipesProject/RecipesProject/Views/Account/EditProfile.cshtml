@@ -1,0 +1,53 @@
+﻿@model RecipesProject.Models.MyProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="shadow rounded p-4">
+                <form autocomplete="off" method="post">
+                    <div class="mb-4 text-center">
+                        <h2 class="text-pink fst-italic">Edit Profile</h2>
+                        <span class="fst-italic text-muted">Update your profile information</span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="firstName" asp-for="FirstName">
+                            <label asp-for="FirstName">First Name</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="lastName" asp-for="LastName">
+                            <label asp-for="LastName">Last Name</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="username" asp-for="UserName">
+                            <label asp-for="UserName">User Name</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" id="age" asp-for="Age">
+                            <label asp-for="Age">Age</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" asp-for="Email">
+                            <label asp-for="Email">Email</label>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
