@@ -32,9 +32,9 @@ namespace RecipesProject.Tests.Services
                 CookTime = 10,
                 TotalTime = 10,
                 IsApproved = true,
-                CategoryId = Guid.NewGuid(),    
-                Servings=4,
-                Image="TestImage",
+                CategoryId = Guid.NewGuid(),
+                Servings = 4,
+                Image = "TestImage",
                 CreatorId = Guid.NewGuid().ToString(),
             });
             data.Recipes.Add(new Recipe()
@@ -50,7 +50,7 @@ namespace RecipesProject.Tests.Services
                 CategoryId = Guid.NewGuid(),
                 Servings = 4,
                 Image = "TestImage2",
-                CreatorId =Guid.NewGuid().ToString(),
+                CreatorId = Guid.NewGuid().ToString(),
             });
 
             data.SaveChanges();
@@ -74,6 +74,54 @@ namespace RecipesProject.Tests.Services
             #endregion
 
         }
-       
+        [Test]
+        public async Task AddRecipe_SavesToDatabase()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+
+            var userId = Guid.NewGuid().ToString();
+            var model = new AddRecipeViewModel()
+            {
+                Title = "NewRecipe",
+                Description = "New Recipe Description",
+                Instructions = "New Recipe Instructions",
+                PrepTime = 15,
+                CookTime = 20,
+                TotalTime = 35,
+                Servings = 4,
+                Image = "NewRecipeImage.jpg",
+                CategoryId = Guid.NewGuid(),
+                Ingredients = new List<IngredientViewModel>()
+        {
+            new IngredientViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Ingredient1",
+                Quantity = "100",
+            },
+            new IngredientViewModel()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Ingredient2",
+                Quantity = "5",
+            },
+
+        }
+            };
+            #endregion
+
+            #region Act
+            await recipeService.AddRecipe(model, userId);
+            #endregion
+
+            #region Assert
+            var addedRecipe = data.Recipes.FirstOrDefault(r => r.Title == "NewRecipe");
+            Assert.IsNotNull(addedRecipe);
+            #endregion
+        }
+
+
     }
 }

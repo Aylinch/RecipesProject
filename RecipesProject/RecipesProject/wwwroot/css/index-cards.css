@@ -42,14 +42,16 @@ body {
 
 .card {
     overflow: hidden;
-    box-shadow: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: var(--radius);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     cursor: pointer;
     transition: transform 200ms ease-in;
-    margin-right: 20px;
+    text-align: center;
+}
+
+.card__body {
+    display: flex;
+    flex-direction: column;
 }
 
 .card__image {
@@ -64,6 +66,12 @@ body {
 
 .card__description {
     padding: 0 1rem;
+    max-height: 5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .card__btn {
@@ -74,9 +82,10 @@ body {
     margin: 1rem;
     border: 2px solid var(--clr-primary);
     background: transparent;
-    color:red;
+    color: var(--clr-primary);
     border-radius: var(--radius);
     transition: background 200ms ease-in, color 200ms ease-in;
+    text-decoration: none;
 }
 
 .card:hover {
@@ -86,4 +95,5 @@ body {
     .card:hover .card__btn {
         background: var(--clr-primary);
         color: white;
+        text-decoration: none;
     }
