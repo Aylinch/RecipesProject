@@ -123,12 +123,58 @@ namespace RecipesProject.Tests.Services
             #endregion
         }
         [Test]
+        public async Task AddRecipe_WithEmptyIngredientsList_SavesToDatabase()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+
+            var userId = Guid.NewGuid().ToString();
+            var model = new AddRecipeViewModel()
+            {
+                Title = "NewRecipe",
+                Description = "New Recipe Description",
+                Instructions = "New Recipe Instructions",
+                PrepTime = 15,
+                CookTime = 20,
+                TotalTime = 35,
+                Servings = 4,
+                Image = "NewRecipeImage.jpg",
+                CategoryId = Guid.NewGuid(),
+                Ingredients = new List<IngredientViewModel>()
+            };
+
+            #endregion
+            #region Act
+            await recipeService.AddRecipe(model, userId);
+            #endregion
+            #region Assert
+            var addedRecipe = data.Recipes.FirstOrDefault(r => r.Title == "NewRecipe");
+            Assert.IsNotNull(addedRecipe);
+            #endregion
+        }
+
+        [Test]
         public void AddRecipesThrowsNullExceptions()
         {
             using var data = DatabaseMock.Instance;
             var RecipeService = new RecipeService(data);
             var ex = Assert.ThrowsAsync<NullReferenceException>(async ()
                 => await RecipeService.AddRecipe(null!, null!));
+        }
+        [Test]
+        public async Task TodaySpecial_ReturnsEmptyList_WhenNoRecipesAvailable()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            #endregion
+            #region Act
+            var todaySpecialRecipes = await recipeService.TodaySpacial();
+            #endregion
+            #region Assert
+            Assert.IsEmpty(todaySpecialRecipes);
+            #endregion
         }
         [Test]
         public async Task GetRecipe_CorrectRequest()
@@ -210,6 +256,37 @@ namespace RecipesProject.Tests.Services
             Assert.That(result.Count(), Is.EqualTo(1));
         }
         [Test]
+        public async Task GetRecipeByIdAsync_ReturnsNull_WhenRecipeNotFound()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            var nonExistingRecipeId = Guid.NewGuid();
+            #endregion
+
+            #region Act
+            var result = await recipeService.GetRecipeByIdAsync(nonExistingRecipeId);
+            #endregion
+            #region Assert
+            Assert.IsNull(result);
+            #endregion
+        }
+        [Test]
+        public async Task FilterAsync_ReturnsAllRecipes_WhenFilterModelIsNull()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            #endregion
+            #region Act
+            var filteredRecipes = await recipeService.FilterAsync(null);
+            #endregion
+            #region Assert
+            var allRecipes = await recipeService.AllAsync();
+            Assert.AreEqual(allRecipes.Count, filteredRecipes.Count);
+            #endregion
+        }
+        [Test]
         public async Task FilterAsync_ReturnsFilteredRecipes()
         {
             #region Arrange
@@ -221,9 +298,9 @@ namespace RecipesProject.Tests.Services
     new Recipe
     {
         Id = Guid.NewGuid(),
-        Title = "Chicken Curry",
-        Description = "Delicious chicken curry recipe",
-        Instructions = "Cook chicken with spices and coconut milk",
+        Title = "Title",
+        Description = "Description",
+        Instructions = "Instruction",
         Servings = 4,
         CookTime = 30,
         CreatorId = Guid.NewGuid().ToString(),
@@ -231,12 +308,12 @@ namespace RecipesProject.Tests.Services
         {
             new RecipeIngredients
             {
-                Ingredient = new Ingredient { Name = "Chicken" },
+                Ingredient = new Ingredient { Name = "product" },
                 IngredientQuanitity = "500"
             },
             new RecipeIngredients
             {
-                Ingredient = new Ingredient { Name = "Coconut Milk" },
+                Ingredient = new Ingredient { Name = "Product" },
                 IngredientQuanitity = "400"
             }
         }
@@ -244,9 +321,9 @@ namespace RecipesProject.Tests.Services
     new Recipe
     {
         Id = Guid.NewGuid(),
-        Title = "Beef Stir Fry",
-        Description = "Tasty beef stir fry recipe",
-        Instructions = "Stir fry beef with vegetables",
+        Title = "Title",
+        Description = "Description",
+        Instructions = "Instruction",
         Servings = 2,
         CookTime = 25,
         CreatorId = Guid.NewGuid().ToString(),
@@ -254,12 +331,12 @@ namespace RecipesProject.Tests.Services
         {
             new RecipeIngredients
             {
-                Ingredient = new Ingredient { Name = "Beef" },
+                Ingredient = new Ingredient { Name = "Product" },
                 IngredientQuanitity = "400"
             },
             new RecipeIngredients
             {
-                Ingredient = new Ingredient { Name = "Vegetables" },
+                Ingredient = new Ingredient { Name = "Product" },
                 IngredientQuanitity = "300"
             }
         }
@@ -279,6 +356,120 @@ namespace RecipesProject.Tests.Services
             var filteredRecipes = await recipeService.FilterAsync(filterModel);
             #endregion
 
+            #region Assert
+            Assert.IsNotNull(filteredRecipes);
+            #endregion
+        }
+        [Test]
+        public async Task FilterAsync_ReturnsEmptyList_WhenNoRecipesMatchCriteria()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            var filterModel = new FilterViewModel
+            {
+                ServingsFilter = 10,
+                IngredientFilter = "tomato",
+                TimeFilter = "fast"
+            };
+            #endregion
+            #region Act
+            var filteredRecipes = await recipeService.FilterAsync(filterModel);
+            #endregion
+            #region Assert
+            Assert.IsEmpty(filteredRecipes);
+            #endregion
+        }
+        [Test]
+        public async Task FilterAsync_ReturnsRecipesWithSpecifiedIngredient()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            data.Recipes.AddRange(new List<Recipe>
+    {
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "Title",
+            Description = "Descripton",
+            Instructions = "Instruction",
+            Servings = 4,
+            CookTime = 30,
+            CreatorId = Guid.NewGuid().ToString(),
+            RecipeIngredients = new HashSet<RecipeIngredients>
+            {
+                new RecipeIngredients
+                {
+                    Ingredient = new Ingredient { Name = "Product" },
+                    IngredientQuanitity = "500"
+                },
+                new RecipeIngredients
+                {
+                    Ingredient = new Ingredient { Name = "Product" },
+                    IngredientQuanitity = "400"
+                }
+            }
+        },
+    });
+            data.SaveChanges();
+
+            var filterModel = new FilterViewModel
+            {
+                ServingsFilter = 0,
+                IngredientFilter = "chicken"
+            };
+            #endregion
+            #region Act
+            var filteredRecipes = await recipeService.FilterAsync(filterModel);
+            #endregion
+            #region Assert
+            Assert.IsNotNull(filteredRecipes);
+            #endregion
+        }
+        [Test]
+        public async Task FilterAsync_ReturnsRecipesWithCorrectCookingTime()
+        {
+            #region Аrrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            data.Recipes.AddRange(new List<Recipe>
+    {
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "Tile",
+            Description = "Description",
+            Instructions = "Instruction",
+            Servings = 4,
+            CookTime = 30,
+            CreatorId = Guid.NewGuid().ToString(),
+            RecipeIngredients = new HashSet<RecipeIngredients>
+            {
+                new RecipeIngredients
+                {
+                    Ingredient = new Ingredient { Name = "Product" },
+                    IngredientQuanitity = "500"
+                },
+                new RecipeIngredients
+                {
+                    Ingredient = new Ingredient { Name = "Product" },
+                    IngredientQuanitity = "400"
+                }
+            }
+        },
+    });
+            data.SaveChanges();
+
+            var filterModel = new FilterViewModel
+            {
+                ServingsFilter = 0,
+                TimeFilter = "medium" 
+            };
+            #endregion
+            #region Act
+            var filteredRecipes = await recipeService.FilterAsync(filterModel);
+            #endregion
             #region Assert
             Assert.IsNotNull(filteredRecipes);
             #endregion
@@ -332,6 +523,54 @@ namespace RecipesProject.Tests.Services
             Assert.IsNotNull(todaySpecialRecipes);
             Assert.IsTrue(todaySpecialRecipes.Count <= 4); 
             Assert.IsTrue(todaySpecialRecipes.All(recipe => data.Recipes.Any(r => r.Id == recipe.Id && r.IsApproved)));
+            #endregion
+        }
+        [Test]
+        public async Task TodaySpecial_ReturnsEmptyList_WhenNoApprovedRecipesAvailable()
+        {
+            # region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            data.Recipes.AddRange(new List<Recipe>
+    {
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "UnapprovedRecipe",
+            Description = "Unapproved Recipe Description",
+            Instructions = "Unapproved Recipe Instructions",
+            PrepTime = 10,
+            CookTime = 10,
+            TotalTime = 10,
+            IsApproved = false,
+            CategoryId = Guid.NewGuid(),
+            Servings = 4,
+            Image = "UnapprovedImage",
+            CreatorId = Guid.NewGuid().ToString(),
+        },
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "AnotherUnapprovedRecipe",
+            Description = "Another Unapproved Recipe Description",
+            Instructions = "Another Unapproved Recipe Instructions",
+            PrepTime = 10,
+            CookTime = 10,
+            TotalTime = 10,
+            IsApproved = false,
+            CategoryId = Guid.NewGuid(),
+            Servings = 4,
+            Image = "AnotherUnapprovedImage",
+            CreatorId = Guid.NewGuid().ToString(),
+        }
+    });
+            data.SaveChanges();
+            #endregion
+            #region Act
+            var todaySpecialRecipes = await recipeService.TodaySpacial();
+            #endregion
+            #region Assert
+            Assert.IsEmpty(todaySpecialRecipes);
             #endregion
         }
     }

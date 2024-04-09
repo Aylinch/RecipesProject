@@ -86,6 +86,10 @@ namespace RecipesProject.Services
 
         public async Task<List<RecipeViewModel>> FilterAsync(FilterViewModel model)
         {
+            if (model == null)
+            {
+                return await AllAsync();
+            }
             var servings = model.ServingsFilter;
             var ingredients = model.IngredientFilter;
             var time = model.TimeFilter;
@@ -108,7 +112,7 @@ namespace RecipesProject.Services
                 {
                     recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("pork"))).ToList();
                 }
-                if (ingredients == "pork")
+                if (ingredients == "spaghetti")
                 {
                     recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("spaghetti"))).ToList();
                 }
