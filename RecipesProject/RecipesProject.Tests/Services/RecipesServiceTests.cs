@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using RecipesProject.Data.Entities;
 using RecipesProject.Models.RecipeViewModels;
 using RecipesProject.Services;
@@ -121,7 +122,92 @@ namespace RecipesProject.Tests.Services
             Assert.IsNotNull(addedRecipe);
             #endregion
         }
+        [Test]
+        public void AddRecipesThrowsNullExceptions()
+        {
+            using var data = DatabaseMock.Instance;
+            var RecipeService = new RecipeService(data);
+            var ex = Assert.ThrowsAsync<NullReferenceException>(async ()
+                => await RecipeService.AddRecipe(null!, null!));
+        }
+        [Test]
+        public async Task GetRecipe_CorrectRequest()
+        {
+            #region Arrange
 
+            using var data = DatabaseMock.Instance;
 
+            var recipeService = new RecipeService(data);
+            var recipeId = Guid.NewGuid();
+
+            data.Recipes.Add(new Recipe()
+            {
+                Id = recipeId,
+                Title = "TestTitle",
+                Description = "TestDescription",
+                Instructions = "TestInstruction",
+                PrepTime = 10,
+                CookTime = 10,
+                TotalTime = 10,
+                IsApproved = true,
+                CategoryId = Guid.NewGuid(),
+                Servings = 4,
+                Image = "TestImage",
+                CreatorId = Guid.NewGuid().ToString(),
+            });
+
+            data.SaveChanges();
+
+            #endregion
+
+            #region Act
+
+            var result = await recipeService.GetRecipeByIdAsync(recipeId);
+
+            var recipe = await data.Recipes
+                .Where(r => r.Id == recipeId)
+                .Where(r => r.PrepTime==10)
+                .Where(r => r.Title=="TestTitle")
+                .Where(r => r.TotalTime==10)
+                .FirstOrDefaultAsync();
+
+            #endregion
+
+            #region Assert
+
+            Assert.That(recipe, Is.Not.Null);
+
+            #endregion
+        }
+
+        [Test]
+        public async Task ListRecipes_GetAllRecipesByGivenUserId()
+        {
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            var userId = Guid.NewGuid();
+
+            data.Recipes.Add(new Recipe()
+            {
+                Id = Guid.NewGuid(),
+                Title = "TestTitle",
+                Description = "TestDescription",
+                Instructions = "TestInstruction",
+                PrepTime = 10,
+                CookTime = 10,
+                TotalTime = 10,
+                IsApproved = true,
+                CategoryId = Guid.NewGuid(),
+                Servings = 4,
+                Image = "TestImage",
+                CreatorId = userId.ToString(),
+            });
+
+            data.SaveChanges();
+
+            var result = await recipeService.GetUserRecipes(userId.ToString());
+
+            Assert.That(result.Count(), Is.EqualTo(1));
+        }
     }
 }
