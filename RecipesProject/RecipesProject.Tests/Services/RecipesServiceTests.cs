@@ -166,9 +166,9 @@ namespace RecipesProject.Tests.Services
 
             var recipe = await data.Recipes
                 .Where(r => r.Id == recipeId)
-                .Where(r => r.PrepTime==10)
-                .Where(r => r.Title=="TestTitle")
-                .Where(r => r.TotalTime==10)
+                .Where(r => r.PrepTime == 10)
+                .Where(r => r.Title == "TestTitle")
+                .Where(r => r.TotalTime == 10)
                 .FirstOrDefaultAsync();
 
             #endregion
@@ -208,6 +208,131 @@ namespace RecipesProject.Tests.Services
             var result = await recipeService.GetUserRecipes(userId.ToString());
 
             Assert.That(result.Count(), Is.EqualTo(1));
+        }
+        [Test]
+        public async Task FilterAsync_ReturnsFilteredRecipes()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+
+            data.Recipes.AddRange(new List<Recipe>
+{
+    new Recipe
+    {
+        Id = Guid.NewGuid(),
+        Title = "Chicken Curry",
+        Description = "Delicious chicken curry recipe",
+        Instructions = "Cook chicken with spices and coconut milk",
+        Servings = 4,
+        CookTime = 30,
+        CreatorId = Guid.NewGuid().ToString(),
+        RecipeIngredients = new HashSet<RecipeIngredients>
+        {
+            new RecipeIngredients
+            {
+                Ingredient = new Ingredient { Name = "Chicken" },
+                IngredientQuanitity = "500"
+            },
+            new RecipeIngredients
+            {
+                Ingredient = new Ingredient { Name = "Coconut Milk" },
+                IngredientQuanitity = "400"
+            }
+        }
+    },
+    new Recipe
+    {
+        Id = Guid.NewGuid(),
+        Title = "Beef Stir Fry",
+        Description = "Tasty beef stir fry recipe",
+        Instructions = "Stir fry beef with vegetables",
+        Servings = 2,
+        CookTime = 25,
+        CreatorId = Guid.NewGuid().ToString(),
+        RecipeIngredients = new HashSet<RecipeIngredients>
+        {
+            new RecipeIngredients
+            {
+                Ingredient = new Ingredient { Name = "Beef" },
+                IngredientQuanitity = "400"
+            },
+            new RecipeIngredients
+            {
+                Ingredient = new Ingredient { Name = "Vegetables" },
+                IngredientQuanitity = "300"
+            }
+        }
+      },
+    });
+            data.SaveChanges();
+
+            var filterModel = new FilterViewModel
+            {
+                ServingsFilter = 4,
+                IngredientFilter = "chicken",
+                TimeFilter = "fast"
+            };
+            #endregion
+
+            #region Act
+            var filteredRecipes = await recipeService.FilterAsync(filterModel);
+            #endregion
+
+            #region Assert
+            Assert.IsNotNull(filteredRecipes);
+            #endregion
+        }
+        [Test]
+        public async Task TodaySpecial_ReturnsUpToFourApprovedRecipes()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var recipeService = new RecipeService(data);
+            data.Recipes.AddRange(new List<Recipe>
+    {
+        new Recipe
+        {
+                Id = Guid.NewGuid(),
+                Title = "TestTitle",
+                Description = "TestDescription",
+                Instructions = "TestInstruction",
+                PrepTime = 10,
+                CookTime = 10,
+                TotalTime = 10,
+                IsApproved = true,
+                CategoryId = Guid.NewGuid(),
+                Servings = 4,
+                Image = "TestImage",
+                CreatorId = Guid.NewGuid().ToString(),
+        },
+        new Recipe
+        {
+                Id = Guid.NewGuid(),
+                Title = "TestTitle2",
+                Description = "TestDescription2",
+                Instructions = "TestInstruction2",
+                PrepTime = 10,
+                CookTime = 10,
+                TotalTime = 10,
+                IsApproved = true,
+                CategoryId = Guid.NewGuid(),
+                Servings = 4,
+                Image = "TestImage2",
+                CreatorId = Guid.NewGuid().ToString(),
+        },
+
+    });
+            data.SaveChanges();
+            #endregion
+            #region Act
+            var todaySpecialRecipes = await recipeService.TodaySpacial();
+            #endregion
+            #region Assert
+            Assert.IsNotNull(todaySpecialRecipes);
+            Assert.IsTrue(todaySpecialRecipes.Count <= 4); 
+            Assert.IsTrue(todaySpecialRecipes.All(recipe => data.Recipes.Any(r => r.Id == recipe.Id && r.IsApproved)));
+            #endregion
         }
     }
 }
