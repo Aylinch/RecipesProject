@@ -22,63 +22,114 @@ namespace RecipesProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllRecipes()
         {
-            List<RecipeViewModel> recipes = await recipeService.AllAsync();
-            return View(recipes);
+            try
+            {
+                List<RecipeViewModel> recipes = await recipeService.AllAsync();
+                return View(recipes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
         [HttpGet]
         public async Task<IActionResult> AddRecipe()
         {
-            var categories = await categoryService.AllCategoryAsync();
-            ViewBag.CategoryId = new SelectList(categories, "Id", "Name");
-            return View();
+            try
+            {
+                var categories = await categoryService.AllCategoryAsync();
+                ViewBag.CategoryId = new SelectList(categories, "Id", "Name");
+                return View();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> AddRecipe(AddRecipeViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                await recipeService.AddRecipe(model, userId);
-                return RedirectToAction("Index", "Home");
+                if (ModelState.IsValid)
+                {
+                    string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    await recipeService.AddRecipe(model, userId);
+                    return RedirectToAction("Index", "Home");
+                }
+                return View("AllRecipes", model);
             }
-            return View("AllRecipes", model);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<Recipe>> GetRecipeById(Guid id)
-        {
-            var recipe = await recipeService.GetRecipeByIdAsync(id);
-
-            if (recipe == null)
+            catch (Exception)
             {
-                return NotFound();
+                throw;
             }
+        }
 
-            return View(recipe);
-        }
-  
         [HttpGet]
-        public async Task<IActionResult> Filter(FilterViewModel model)  
+        public async Task<IActionResult> GetRecipeById(Guid id)
         {
-           var recipes = await recipeService.FilterAsync(model);
-           return View("AllRecipes", recipes);
+            try
+            {
+                var recipe = await recipeService.GetRecipeByIdAsync(id);
+
+                if (recipe == null)
+                {
+                    return NotFound();
+                }
+
+                return View(recipe);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
         [HttpGet]
-        public  async Task<IActionResult> RemoveFilters(FilterViewModel model)
+        public async Task<IActionResult> Filter(FilterViewModel model)
         {
-            model.ServingsFilter = 0;
-            model.IngredientFilter = "";
-            model.TimeFilter = "";
-            return RedirectToAction("AllRecipes");
+            try
+            {
+                var recipes = await recipeService.FilterAsync(model);
+                return View("AllRecipes", recipes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveFilters(FilterViewModel model)
+        {
+            try
+            {
+                model.ServingsFilter = 0;
+                model.IngredientFilter = "";
+                model.TimeFilter = "";
+                return RedirectToAction("AllRecipes");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetUserRecipes()
         {
-            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var recipes = await recipeService.GetUserRecipes(userId);
-            return View("UserRecipes", recipes);
+            try
+            {
+                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var recipes = await recipeService.GetUserRecipes(userId);
+                return View("UserRecipes", recipes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

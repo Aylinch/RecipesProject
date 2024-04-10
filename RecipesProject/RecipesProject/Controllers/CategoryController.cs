@@ -15,15 +15,29 @@ namespace RecipesProject.Controllers
         [HttpGet]
         public async Task<IActionResult> AllCategories()
         {
-            List<Category> categories = await categoryService.AllCategoryAsync();
-            return View(categories);
+            try
+            {
+                List<Category> categories = await categoryService.AllCategoryAsync();
+                return View(categories);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> AllFromCategories(Guid categoryId)
         {
-            List<Recipe> recipes = await categoryService.AllFromCategoriesAsync(categoryId);
-            return View(recipes);
+            try
+            {
+                List<Recipe> recipes = await categoryService.AllFromCategoriesAsync(categoryId);
+                return View(recipes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

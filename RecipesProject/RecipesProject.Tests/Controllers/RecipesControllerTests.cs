@@ -474,5 +474,28 @@ namespace RecipesProject.Tests.Controllers
                 #endregion
             }
         }
+        [Test]
+        public async Task Index_ReturnsEmptyList_WhenNoRecipesExist()
+        {
+            #region Arrange
+            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+            using (var context = new ApplicationDbContext(dbContextOptions))
+            {
+                var controller = new RecipesController(context);
+                #endregion
+                #region Act
+                var result = await controller.Index();
+                #endregion
+                #region Assert
+                Assert.IsInstanceOf<ViewResult>(result);
+                var viewResult = result as ViewResult;
+                Assert.IsNotNull(viewResult.ViewData.Model);
+                var model = viewResult.ViewData.Model as List<Recipe>;
+                Assert.IsEmpty(model);
+                #endregion
+            }
+        }
     }
 }

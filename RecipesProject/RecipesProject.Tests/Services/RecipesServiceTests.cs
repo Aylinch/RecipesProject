@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using RecipesProject.Data;
 using RecipesProject.Data.Entities;
 using RecipesProject.Models.RecipeViewModels;
 using RecipesProject.Services;
@@ -573,5 +574,39 @@ namespace RecipesProject.Tests.Services
             Assert.IsEmpty(todaySpecialRecipes);
             #endregion
         }
+
+        [Test]
+        public async Task FilterAsync_ReturnsFilteredRecipes_WhenModelNotNull()
+        {
+            #region Arrange
+            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+            using (var context = new ApplicationDbContext(dbContextOptions))
+            {
+                var recipes = new List<Recipe>
+        {
+            new Recipe { Title = "Recipe 1", Servings = 2, CookTime = 30, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" },
+            new Recipe { Title = "Recipe 2", Servings = 4, CookTime = 40, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" },
+            new Recipe { Title = "Recipe 3", Servings = 6, CookTime = 50, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" }
+        };
+                await context.Recipes.AddRangeAsync(recipes);
+                await context.SaveChangesAsync();
+                var service = new RecipeService(context);
+                var filterModel = new FilterViewModel
+                {
+                    ServingsFilter = 4,
+                    TimeFilter = "medium"
+                };
+                #endregion
+                #region Act
+                var result = await service.FilterAsync(filterModel);
+                #endregion
+                #region Assert
+                Assert.AreEqual(1, result.Count);
+                Assert.AreEqual("Recipe 2", result[0].Title);
+                #endregion
+            }
+        }
     }
-}
+    }
