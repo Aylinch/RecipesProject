@@ -1,0 +1,18 @@
+﻿.same-style {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.form-check-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+}
+
+.btn {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 20px;
+}

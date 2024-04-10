@@ -145,6 +145,65 @@ namespace RecipesProject.Tests.Services
             Assert.That(recipesFromCategory.Count, Is.EqualTo(0));
             #endregion
         }
+        [Test]
+        public async Task AllFromCategoriesAsync_ReturnsEmptyList_WhenCategoryIdNotFound()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var categoryService = new CategoryService(data);
+            var nonExistentCategoryId = Guid.NewGuid();
+            #endregion
+            #region Act
+            var recipesFromCategory = await categoryService.AllFromCategoriesAsync(nonExistentCategoryId);
+            #endregion
+            #region Assert
+            Assert.IsNotNull(recipesFromCategory);
+            Assert.IsEmpty(recipesFromCategory);
+            #endregion
+        }
+        [Test]
+        public async Task AllFromCategoriesAsync_ReturnsRecipesFromSpecifiedCategory()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var categoryService = new CategoryService(data);
+            var categoryId = Guid.NewGuid();
+            var category = new Category { Id = categoryId, Name = "TestCategory" };
+            data.Categories.Add(category);
+            data.SaveChanges();
 
+            var recipesInCategory = new List<Recipe>
+    {
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "Recipe1",
+            Description = "Description for Recipe1",
+            CategoryId = categoryId,
+            Instructions = "Instructions for Recipe1",
+            CreatorId = "CreatorId1",
+        },
+        new Recipe
+        {
+            Id = Guid.NewGuid(),
+            Title = "Recipe2",
+            Description = "Description for Recipe2",
+            CategoryId = categoryId,
+            Instructions = "Instructions for Recipe2",
+            CreatorId = "CreatorId2",
+        }
+    };
+            data.Recipes.AddRange(recipesInCategory);
+            data.SaveChanges();
+            #endregion
+            #region Act
+            var recipesFromCategory = await categoryService.AllFromCategoriesAsync(categoryId);
+            #endregion
+            #region Assert
+            Assert.IsNotNull(recipesFromCategory);
+            Assert.AreEqual(2, recipesFromCategory.Count);
+            Assert.IsTrue(recipesFromCategory.All(r => r.CategoryId == categoryId));
+            #endregion
+        }
     }
 }

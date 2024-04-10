@@ -18,5 +18,6 @@ namespace RecipesProject.Areas.Admin.Models
         public List<CategoryViewModel>? Categories { get; set; }
         public List<IngredientViewModel>? Ingredients { get; set; }
         public string? CategoryName { get; internal set; }
+        public string? CreatorId { get; set; }
     }
 }

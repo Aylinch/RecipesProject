@@ -29,7 +29,7 @@ namespace RecipesProject.Areas.Admin.Controllers
             var applicationDbContext = _context.Recipes
                 .Where(r => r.IsApproved == false)
                 .Include(r => r.Category);
-            return View(await applicationDbContext.ToListAsync());
+            return View("Index", await applicationDbContext.ToListAsync());
         }
 
         // GET: Admin/Recipes/Details/5
@@ -128,6 +128,11 @@ namespace RecipesProject.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] Guid id, EditRecipeViewModel model)
         {
+            if (model == null)
+            {
+                return BadRequest(); 
+            }
+
             if (ModelState.IsValid)
             {
                 var existingRecipe = await _context.Recipes
@@ -138,6 +143,7 @@ namespace RecipesProject.Areas.Admin.Controllers
                 {
                     return NotFound();
                 }
+
                 existingRecipe.Title = model.Title;
                 existingRecipe.Description = model.Description;
                 existingRecipe.Instructions = model.Instructions;
@@ -149,30 +155,43 @@ namespace RecipesProject.Areas.Admin.Controllers
                 existingRecipe.CategoryId = model.CategoryId;
 
                 existingRecipe.RecipeIngredients.Clear();
-                foreach (var ingredientViewModel in model.Ingredients!)
+                if (model.Ingredients != null)
                 {
-                    var ingredient = new Ingredient
+                    foreach (var ingredientViewModel in model.Ingredients)
                     {
-                        Id = ingredientViewModel.Id,
-                        Name = ingredientViewModel.Name
-                    };
+                        if (ingredientViewModel == null)
+                        {
+                            continue; 
+                        }
 
-                    existingRecipe.RecipeIngredients.Add(new RecipeIngredients
-                    {
-                        RecipeId = existingRecipe.Id,
-                        Ingredient = ingredient,
-                        IngredientQuanitity = ingredientViewModel.Quantity
-                    });
+                        var ingredient = new Ingredient
+                        {
+                            Id = ingredientViewModel.Id,
+                            Name = ingredientViewModel.Name
+                        };
+
+                        existingRecipe.RecipeIngredients.Add(new RecipeIngredients
+                        {
+                            RecipeId = existingRecipe.Id,
+                            Ingredient = ingredient,
+                            IngredientQuanitity = ingredientViewModel.Quantity
+                        });
+                    }
                 }
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
-            var categories = await _context.Categories.Where(x => x.Name != model.CategoryName).Select(x => new CategoryViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-            }).ToListAsync();
+
+            var categories = await _context.Categories
+                .Where(x => x.Name != model.CategoryName)
+                .Select(x => new CategoryViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
             model.Categories = categories;
             return View(model);
         }
@@ -212,6 +231,7 @@ namespace RecipesProject.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveRecipe(Guid id)
         {
             var recipe = await _context.Recipes.FindAsync(id);
@@ -219,8 +239,9 @@ namespace RecipesProject.Areas.Admin.Controllers
             {
                 recipe.IsApproved = true;
                 await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return NotFound();
         }
 
         private bool RecipeExists(Guid id)
