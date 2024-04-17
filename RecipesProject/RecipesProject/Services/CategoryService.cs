@@ -22,7 +22,7 @@ namespace RecipesProject.Services
 
         public async Task<List<Recipe>> AllFromCategoriesAsync(Guid categoryId)
         {
-            return await dbContext.Recipes.Where(x => x.Category.Id == categoryId).ToListAsync();
+            return await dbContext.Recipes.Where(x => x.Category.Id == categoryId && x.IsApproved == true).ToListAsync();
         }
     }
 }

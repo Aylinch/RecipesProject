@@ -1,13 +1,15 @@
 ﻿@model List<RecipesProject.Data.Entities.Recipe>
 <link rel="stylesheet" href="~/css/all-recipes.css">
 <div class="row">
-            <div class="col-10">
-            <div class="card-container">
+    <div class="col-12 d-flex justify-content-center">
+        <div class="card-container">
+            @if (Model.Any())
+            {
                 @foreach (var recipe in Model)
                 {
                     <div class="card">
                         <div class="card--img">
-                        <img class="card--img" src="@recipe.Image" alt="@recipe.Title">
+                            <img class="card--img" src="@recipe.Image" alt="@recipe.Title">
                         </div>
                         <div class="card--text">
                             <div class="card--title">
@@ -19,7 +21,7 @@
                             <a href="@Url.Action("GetRecipeById", "Recipe", new { id = recipe.Id })" class="cta">View Recipe</a>
                         </div>
                     </div>
-                }
-            </div>
+                }}
         </div>
-        </div>
+    </div>
+</div>

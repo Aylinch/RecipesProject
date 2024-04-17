@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RecipesProject.Contracts;
 using RecipesProject.Data;
+using RecipesProject.Data.Account;
 using RecipesProject.Data.Entities;
 using RecipesProject.Models.RecipeViewModels;
 using System.Linq;
@@ -10,10 +12,12 @@ namespace RecipesProject.Services
     public class RecipeService : IRecipeService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly UserManager<User> userManager;
 
-        public RecipeService(ApplicationDbContext dbContext)
+        public RecipeService(ApplicationDbContext dbContext, UserManager<User> userManager)
         {
             this.dbContext = dbContext;
+            this.userManager = userManager;
         }
 
         public async Task<List<RecipeViewModel>> AllAsync()
@@ -40,7 +44,7 @@ namespace RecipesProject.Services
         }
 
 
-        public async Task AddRecipe(AddRecipeViewModel model,string userId)
+        public async Task AddRecipe(AddRecipeViewModel model, string userId)
         {
             var recipe = new Recipe
             {
@@ -54,9 +58,19 @@ namespace RecipesProject.Services
                 Servings = model.Servings,
                 Image = model.Image,
                 CategoryId = model.CategoryId,
-                IsApproved = false,
-                CreatorId= userId
+                CreatorId = userId
             };
+            var user = await userManager.FindByIdAsync(userId);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains("Admin"))
+            {
+                recipe.IsApproved = true;
+            }
+            else
+            {
+                recipe.IsApproved = false;
+            }
             await dbContext.Recipes.AddAsync(recipe);
             foreach (var ingredientViewModel in model.Ingredients)
             {
@@ -102,19 +116,19 @@ namespace RecipesProject.Services
             {
                 if (ingredients == "chicken")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name!.Contains("chicken"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.ToLower().Contains("chicken"))).ToList();
                 }
                 if (ingredients == "beef")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("beef"))).ToList();
-                }
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.ToLower().Contains("beef"))).ToList();
+                }   
                 if (ingredients == "pork")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("pork"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.ToLower().Contains("pork"))).ToList();
                 }
                 if (ingredients == "spaghetti")
                 {
-                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.Contains("spaghetti"))).ToList();
+                    recipes = recipes.Where(x => x.RecipeIngredients.Any(x => x.Ingredient.Name.ToLower().Contains("spaghetti"))).ToList();
                 }
 
             }
@@ -133,7 +147,7 @@ namespace RecipesProject.Services
                         break;
                 }
             }
-            return recipes.Select(recipe =>
+            return recipes.Where(x => x.IsApproved).Select(recipe =>
                  new RecipeViewModel
                  {
                      Id = recipe.Id,
@@ -171,7 +185,7 @@ namespace RecipesProject.Services
 
             return userRecipes;
         }
-        public async Task<List<RecipeViewModel>>TodaySpacial()
+        public async Task<List<RecipeViewModel>> TodaySpacial()
         {
             var recipes = await dbContext.Recipes
                 .Where(r => r.IsApproved == true)
@@ -194,6 +208,5 @@ namespace RecipesProject.Services
                 .ToListAsync();
             return recipes;
         }
-
     }
 }
