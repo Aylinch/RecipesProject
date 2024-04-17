@@ -56,10 +56,10 @@ namespace RecipesProject.Controllers
                 if (ModelState.IsValid)
                 {
                     string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    await recipeService.AddRecipe(model, userId);
+                    await recipeService.AddRecipe(model, userId, User.IsInRole("Admin"));
                     return RedirectToAction("Index", "Home");
                 }
-                return View("AllRecipes", model);
+                return RedirectToAction ("AllRecipes");
             }
             catch (Exception)
             {

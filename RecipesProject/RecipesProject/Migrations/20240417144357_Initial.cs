@@ -24,6 +24,34 @@ namespace RecipesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -66,90 +94,6 @@ namespace RecipesProject.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Recipes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Instructions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PrepTime = table.Column<int>(type: "int", nullable: false),
-                    CookTime = table.Column<int>(type: "int", nullable: false),
-                    TotalTime = table.Column<int>(type: "int", nullable: false),
-                    Servings = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recipes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Recipes_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RecipeIngredients",
-                columns: table => new
-                {
-                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IngredientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IngredientQuanitity = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeIngredients", x => new { x.IngredientId, x.RecipeId });
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredients_Ingredients_IngredientId",
-                        column: x => x.IngredientId,
-                        principalTable: "Ingredients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredients_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -240,23 +184,57 @@ namespace RecipesProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeUsers",
+                name: "Recipes",
                 columns: table => new
                 {
-                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Instructions = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PrepTime = table.Column<int>(type: "int", nullable: false),
+                    CookTime = table.Column<int>(type: "int", nullable: false),
+                    TotalTime = table.Column<int>(type: "int", nullable: false),
+                    Servings = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeUsers", x => new { x.UserId, x.RecipeId });
+                    table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RecipeUsers_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Recipes_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecipeUsers_Recipes_RecipeId",
+                        name: "FK_Recipes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeIngredients",
+                columns: table => new
+                {
+                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IngredientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IngredientQuanitity = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeIngredients", x => new { x.IngredientId, x.RecipeId });
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredients_Ingredients_IngredientId",
+                        column: x => x.IngredientId,
+                        principalTable: "Ingredients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredients_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
@@ -266,15 +244,19 @@ namespace RecipesProject.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a6383851-4451-46c9-8d99-252c81e153ee", "2ba0921a-f640-410a-8a48-3b0bbae9a529", "Admin", null });
+                values: new object[,]
+                {
+                    { "5619007e-b37b-494b-9681-94f4fb9ec279", "10bd47ec-c710-4101-bb11-778c2b811cec", "User", null },
+                    { "a6383851-4451-46c9-8d99-252c81e153ee", "31cb63b8-94a9-4012-8c26-b1ffc5ae2fb8", "Admin", null }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Age", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RecipeId", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "Age", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "52ff7a8f-b2b1-4a92-9fa6-92785311d879", 0, 19, "e8759f06-dc7e-46aa-bcb2-5f42ab998ab3", "limoni@abv.bg", false, "Simona", "Palieva", false, null, "LIMONI@ABV.BG", "MONIO", "AQAAAAEAACcQAAAAENByCgiVvSWP8ftgFLjb+WkR8waMpv/rcppsvfF23ifYMo/6TrRYXyKDjxv5jH7DlQ==", null, false, null, "0cb340af-a7e8-4bab-9ce0-491e69282aad", false, "Monio" },
-                    { "6b243550-7cc1-4d75-8064-cef4c3d8be35", 0, 20, "40e3c77c-8727-44cc-b198-795d2afb00ec", "aylin@abv.bg", false, "Aylin", "Chakakchi", false, null, "AYLIN@ABV.BG", "AYLINN", "AQAAAAEAACcQAAAAEHT+8ZC5vgkIbl+QKJrMFuhK36w/Ffb0Vg7JYxrXWxhSe/HPm9Bbs/h3sJ5oLessCA==", null, false, null, "25a957bc-fed0-483c-a9fe-26f9483ae77b", false, "Aylinn" }
+                    { "52ff7a8f-b2b1-4a92-9fa6-92785311d879", 0, 19, "64714838-9fbc-45bb-b7be-df03db491264", "limoni@abv.bg", false, "Simona", "Palieva", false, null, "LIMONI@ABV.BG", "MONIO", "AQAAAAEAACcQAAAAEBQGOV8H3LJG/kKspRPQH335uuYjuz/g8k5KDMVAR1AjCZ77AuRA9k5bf52RUzGT9A==", null, false, "882b4a5b-49cb-435c-8390-2dec5af0fb2c", false, "Monio" },
+                    { "6b243550-7cc1-4d75-8064-cef4c3d8be35", 0, 20, "85e4f3e0-ba9d-4a7d-8af4-025e1caa4296", "aylin@abv.bg", false, "Aylin", "Chakakchi", false, null, "AYLIN@ABV.BG", "AYLINN", "AQAAAAEAACcQAAAAEC31ukzrEiQVVbr3iwwVVqgh0mBHFuiQQuMuyxCXZIb49RmFuMUUmXjD7H0nHHsF6g==", null, false, "87b8e4a2-4a6d-4cbb-9217-9a7854faf78f", false, "Aylinn" }
                 });
 
             migrationBuilder.InsertData(
@@ -289,6 +271,11 @@ namespace RecipesProject.Migrations
                     { new Guid("b565b246-8790-4dba-9aa8-580ea1077982"), "https://th.bing.com/th/id/R.561af1c6a2e6985609dd071112475a76?rik=V%2bJAoJ4hV%2fq%2fow&pid=ImgRaw&r=0", "Desserts" },
                     { new Guid("ecb1fbcd-7e68-46b3-bff1-1fa2de282e8b"), "https://www.skygate.co.jp/guide/wp-content/uploads/sites/2/2017/03/1703_006-1-768x471.jpg", "Breakfast" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "5619007e-b37b-494b-9681-94f4fb9ec279", "52ff7a8f-b2b1-4a92-9fa6-92785311d879" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -328,11 +315,6 @@ namespace RecipesProject.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_RecipeId",
-                table: "AspNetUsers",
-                column: "RecipeId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -350,9 +332,9 @@ namespace RecipesProject.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeUsers_RecipeId",
-                table: "RecipeUsers",
-                column: "RecipeId");
+                name: "IX_Recipes_CreatorId",
+                table: "Recipes",
+                column: "CreatorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -376,19 +358,16 @@ namespace RecipesProject.Migrations
                 name: "RecipeIngredients");
 
             migrationBuilder.DropTable(
-                name: "RecipeUsers");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Recipes");
 
             migrationBuilder.DropTable(
-                name: "Recipes");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

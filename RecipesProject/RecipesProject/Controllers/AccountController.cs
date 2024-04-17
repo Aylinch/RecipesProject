@@ -48,6 +48,7 @@ namespace RecipesProject.Controllers
                 LastName = model.LastName,
                 Age = model.Age,
             };
+            await userManager.AddToRoleAsync(user, "User");
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

@@ -12,12 +12,10 @@ namespace RecipesProject.Services
     public class RecipeService : IRecipeService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly UserManager<User> userManager;
 
-        public RecipeService(ApplicationDbContext dbContext, UserManager<User> userManager)
+        public RecipeService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.userManager = userManager;
         }
 
         public async Task<List<RecipeViewModel>> AllAsync()
@@ -44,7 +42,7 @@ namespace RecipesProject.Services
         }
 
 
-        public async Task AddRecipe(AddRecipeViewModel model, string userId)
+        public async Task AddRecipe(AddRecipeViewModel model, string userId, bool isAdmin)
         {
             var recipe = new Recipe
             {
@@ -60,10 +58,8 @@ namespace RecipesProject.Services
                 CategoryId = model.CategoryId,
                 CreatorId = userId
             };
-            var user = await userManager.FindByIdAsync(userId);
-            var userRoles = await userManager.GetRolesAsync(user);
 
-            if (userRoles.Contains("Admin"))
+            if (isAdmin)
             {
                 recipe.IsApproved = true;
             }

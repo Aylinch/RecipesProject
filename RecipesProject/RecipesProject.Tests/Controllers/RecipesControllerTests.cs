@@ -145,54 +145,6 @@ namespace RecipesProject.Tests.Controllers
             }
         }
         [Test]
-        public async Task Create_ReturnsViewResult()
-        {
-            #region Arrange
-            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "RecipesDatabase")
-                .Options;
-            using (var context = new ApplicationDbContext(dbContextOptions))
-            {
-                var controller = new RecipesController(context);
-                #endregion
-                #region Act
-                var result = controller.Create();
-                #endregion
-                #region Assert
-                Assert.IsInstanceOf<ViewResult>(result);
-                #endregion
-            }
-        }
-
-        [Test]
-        public async Task Create_WithValidModel_ReturnsRedirectToActionResult()
-        {
-            #region Arrange
-            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "RecipesDatabase")
-                .Options;
-            using (var context = new ApplicationDbContext(dbContextOptions))
-            {
-                var controller = new RecipesController(context);
-                var recipe = new Recipe
-                {
-                    Title = "Test Recipe",
-                    Description = "Test Description",
-                    Instructions = "Test Instructions",
-                    CreatorId = "testUserId", 
-                };
-                #endregion
-                #region Act
-                var result = await controller.Create(recipe);
-                #endregion
-                #region Assert
-                Assert.IsInstanceOf<RedirectToActionResult>(result);
-                var redirectToActionResult = result as RedirectToActionResult;
-                Assert.AreEqual("Index", redirectToActionResult?.ActionName);
-                #endregion
-            }
-        }
-        [Test]
         public async Task Edit_ReturnsViewResult_WithEditRecipeViewModel_WhenRecipeExists()
         {
             #region Arrange

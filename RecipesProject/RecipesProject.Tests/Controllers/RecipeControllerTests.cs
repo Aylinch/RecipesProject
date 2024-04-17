@@ -122,22 +122,22 @@ namespace RecipesProject.Tests.Controllers
             #endregion
         }
         [Test]
-        public async Task AddRecipe_Post_ReturnsViewResult_WhenModelStateIsInvalid()
+        public async Task AddRecipe_Post_ReturnsRedirectToActionResult_WhenModelStateIsInvalid()
         {
             #region Arrange
             var mockRecipeService = new Mock<IRecipeService>();
-            var model = new AddRecipeViewModel(); 
-            var controller = new RecipeController(mockRecipeService.Object, null);
+            var mockCategoryService = new Mock<ICategoryService>();
+            var controller = new RecipeController(mockRecipeService.Object, mockCategoryService.Object);
             controller.ModelState.AddModelError("PropertyName", "Error message");
+            var model = new AddRecipeViewModel();
             #endregion
             #region Act
             var result = await controller.AddRecipe(model);
             #endregion
             #region Assert
-            Assert.IsInstanceOf<ViewResult>(result);
-            var viewResult = (ViewResult)result;
-            Assert.AreEqual("AllRecipes", viewResult.ViewName);
-            Assert.AreEqual(model, viewResult.Model);
+            Assert.IsInstanceOf<RedirectToActionResult>(result);
+            var redirectResult = (RedirectToActionResult)result;
+            Assert.AreEqual("AllRecipes", redirectResult.ActionName);
             #endregion
         }
         [Test]

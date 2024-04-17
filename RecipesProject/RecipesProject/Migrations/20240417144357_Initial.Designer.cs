@@ -12,8 +12,8 @@ using RecipesProject.Data;
 namespace RecipesProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240403070417_Migration3")]
-    partial class Migration3
+    [Migration("20240417144357_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,8 +54,14 @@ namespace RecipesProject.Migrations
                         new
                         {
                             Id = "a6383851-4451-46c9-8d99-252c81e153ee",
-                            ConcurrencyStamp = "7b3f9fbe-2f6a-4161-838d-c44fc4651ef6",
+                            ConcurrencyStamp = "31cb63b8-94a9-4012-8c26-b1ffc5ae2fb8",
                             Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "5619007e-b37b-494b-9681-94f4fb9ec279",
+                            ConcurrencyStamp = "10bd47ec-c710-4101-bb11-778c2b811cec",
+                            Name = "User"
                         });
                 });
 
@@ -152,6 +158,11 @@ namespace RecipesProject.Migrations
                         {
                             UserId = "6b243550-7cc1-4d75-8064-cef4c3d8be35",
                             RoleId = "a6383851-4451-46c9-8d99-252c81e153ee"
+                        },
+                        new
+                        {
+                            UserId = "52ff7a8f-b2b1-4a92-9fa6-92785311d879",
+                            RoleId = "5619007e-b37b-494b-9681-94f4fb9ec279"
                         });
                 });
 
@@ -257,7 +268,7 @@ namespace RecipesProject.Migrations
                             Id = "52ff7a8f-b2b1-4a92-9fa6-92785311d879",
                             AccessFailedCount = 0,
                             Age = 19,
-                            ConcurrencyStamp = "30027618-81b6-4e77-86a6-7e97c665b327",
+                            ConcurrencyStamp = "64714838-9fbc-45bb-b7be-df03db491264",
                             Email = "limoni@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Simona",
@@ -265,9 +276,9 @@ namespace RecipesProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LIMONI@ABV.BG",
                             NormalizedUserName = "MONIO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGeeTYqENsZlrd2eoGz68dy9yOeLvUfQJzxqTIkqqA4tw6sdvv5CrlBNUEDUMMCDqg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBQGOV8H3LJG/kKspRPQH335uuYjuz/g8k5KDMVAR1AjCZ77AuRA9k5bf52RUzGT9A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "561541cd-b648-4961-aa95-a45da193b468",
+                            SecurityStamp = "882b4a5b-49cb-435c-8390-2dec5af0fb2c",
                             TwoFactorEnabled = false,
                             UserName = "Monio"
                         },
@@ -276,7 +287,7 @@ namespace RecipesProject.Migrations
                             Id = "6b243550-7cc1-4d75-8064-cef4c3d8be35",
                             AccessFailedCount = 0,
                             Age = 20,
-                            ConcurrencyStamp = "31780fa5-8d24-41a1-b046-6154dc9908d9",
+                            ConcurrencyStamp = "85e4f3e0-ba9d-4a7d-8af4-025e1caa4296",
                             Email = "aylin@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Aylin",
@@ -284,9 +295,9 @@ namespace RecipesProject.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "AYLIN@ABV.BG",
                             NormalizedUserName = "AYLINN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJjjxG0B4nCnmMcvgLsoVYUSSbx9ELCye/EUeUyb3VYAsyiEJFK8+92/Jhc7ReO01A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC31ukzrEiQVVbr3iwwVVqgh0mBHFuiQQuMuyxCXZIb49RmFuMUUmXjD7H0nHHsF6g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "11496b60-2841-4761-97a8-4dc1928b95c5",
+                            SecurityStamp = "87b8e4a2-4a6d-4cbb-9217-9a7854faf78f",
                             TwoFactorEnabled = false,
                             UserName = "Aylinn"
                         });

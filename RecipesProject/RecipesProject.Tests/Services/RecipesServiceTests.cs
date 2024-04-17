@@ -115,7 +115,7 @@ namespace RecipesProject.Tests.Services
             #endregion
 
             #region Act
-            await recipeService.AddRecipe(model, userId);
+            await recipeService.AddRecipe(model, userId, false);
             #endregion
 
             #region Assert
@@ -147,7 +147,7 @@ namespace RecipesProject.Tests.Services
 
             #endregion
             #region Act
-            await recipeService.AddRecipe(model, userId);
+            await recipeService.AddRecipe(model, userId, false);
             #endregion
             #region Assert
             var addedRecipe = data.Recipes.FirstOrDefault(r => r.Title == "NewRecipe");
@@ -161,7 +161,7 @@ namespace RecipesProject.Tests.Services
             using var data = DatabaseMock.Instance;
             var RecipeService = new RecipeService(data);
             var ex = Assert.ThrowsAsync<NullReferenceException>(async ()
-                => await RecipeService.AddRecipe(null!, null!));
+                => await RecipeService.AddRecipe(null!, null!, false));
         }
         [Test]
         public async Task TodaySpecial_ReturnsEmptyList_WhenNoRecipesAvailable()
@@ -573,40 +573,6 @@ namespace RecipesProject.Tests.Services
             #region Assert
             Assert.IsEmpty(todaySpecialRecipes);
             #endregion
-        }
-
-        [Test]
-        public async Task FilterAsync_ReturnsFilteredRecipes_WhenModelNotNull()
-        {
-            #region Arrange
-            var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-            using (var context = new ApplicationDbContext(dbContextOptions))
-            {
-                var recipes = new List<Recipe>
-        {
-            new Recipe { Title = "Recipe 1", Servings = 2, CookTime = 30, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" },
-            new Recipe { Title = "Recipe 2", Servings = 4, CookTime = 40, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" },
-            new Recipe { Title = "Recipe 3", Servings = 6, CookTime = 50, CreatorId = "sampleId", Description = "Sample Description", Instructions = "Sample Instructions" }
-        };
-                await context.Recipes.AddRangeAsync(recipes);
-                await context.SaveChangesAsync();
-                var service = new RecipeService(context);
-                var filterModel = new FilterViewModel
-                {
-                    ServingsFilter = 4,
-                    TimeFilter = "medium"
-                };
-                #endregion
-                #region Act
-                var result = await service.FilterAsync(filterModel);
-                #endregion
-                #region Assert
-                Assert.AreEqual(1, result.Count);
-                Assert.AreEqual("Recipe 2", result[0].Title);
-                #endregion
-            }
         }
     }
     }

@@ -51,31 +51,6 @@ namespace RecipesProject.Areas.Admin.Controllers
             return View(recipe);
         }
 
-        // GET: Admin/Recipes/Create
-        public IActionResult Create()
-        {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            return View();
-        }
-
-        // POST: Admin/Recipes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Instructions,PrepTime,CookTime,TotalTime,Servings,Image,CategoryId")] Recipe recipe)
-        {
-            if (ModelState.IsValid)
-            {
-                recipe.Id = Guid.NewGuid();
-                _context.Add(recipe);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
-        }
-
         // GET: Admin/Recipes/Edit/5
         public async Task<IActionResult> Edit(Guid id)
         {

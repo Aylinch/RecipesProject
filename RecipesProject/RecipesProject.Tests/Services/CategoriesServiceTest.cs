@@ -162,7 +162,22 @@ namespace RecipesProject.Tests.Services
             #endregion
         }
         [Test]
-        public async Task AllFromCategoriesAsync_ReturnsRecipesFromSpecifiedCategory()
+        public async Task AllCategoryAsync_ReturnsEmptyList_WhenNoCategoriesExist()
+        {
+            #region Arrange
+            using var data = DatabaseMock.Instance;
+            var categoryService = new CategoryService(data);
+            #endregion
+            #region Act
+            var categories = await categoryService.AllCategoryAsync();
+            #endregion
+            #region Assert
+            Assert.IsEmpty(categories);
+            #endregion
+        }
+
+        [Test]
+        public async Task AllFromCategoriesAsync_ReturnsOnlyApprovedRecipes()
         {
             #region Arrange
             using var data = DatabaseMock.Instance;
@@ -171,27 +186,38 @@ namespace RecipesProject.Tests.Services
             var category = new Category { Id = categoryId, Name = "TestCategory" };
             data.Categories.Add(category);
             data.SaveChanges();
-
             var recipesInCategory = new List<Recipe>
     {
         new Recipe
         {
             Id = Guid.NewGuid(),
-            Title = "Recipe1",
-            Description = "Description for Recipe1",
+            Title = "Recipe 1",
+            Description = "Description for Recipe 1",
             CategoryId = categoryId,
-            Instructions = "Instructions for Recipe1",
-            CreatorId = "CreatorId1",
+            Instructions = "TestInstruction1",
+            PrepTime = 8,
+            CookTime = 12,
+            TotalTime = 20,
+            IsApproved = true,
+            Servings = 5,
+            Image = "TestImage1",
+            CreatorId = Guid.NewGuid().ToString(),
         },
         new Recipe
         {
             Id = Guid.NewGuid(),
-            Title = "Recipe2",
-            Description = "Description for Recipe2",
+            Title = "Recipe 2",
+            Description = "Description for Recipe 2",
             CategoryId = categoryId,
-            Instructions = "Instructions for Recipe2",
-            CreatorId = "CreatorId2",
-        }
+            Instructions = "TestInstruction2",
+            PrepTime = 10,
+            CookTime = 10,
+            TotalTime = 10,
+            IsApproved = false,
+            Servings = 4,
+            Image = "TestImage2",
+            CreatorId = Guid.NewGuid().ToString(),
+        },
     };
             data.Recipes.AddRange(recipesInCategory);
             data.SaveChanges();
@@ -200,9 +226,8 @@ namespace RecipesProject.Tests.Services
             var recipesFromCategory = await categoryService.AllFromCategoriesAsync(categoryId);
             #endregion
             #region Assert
-            Assert.IsNotNull(recipesFromCategory);
-            Assert.AreEqual(2, recipesFromCategory.Count);
-            Assert.IsTrue(recipesFromCategory.All(r => r.CategoryId == categoryId));
+            Assert.AreEqual(1, recipesFromCategory.Count);
+            Assert.AreEqual("Recipe 1", recipesFromCategory.First().Title);
             #endregion
         }
     }

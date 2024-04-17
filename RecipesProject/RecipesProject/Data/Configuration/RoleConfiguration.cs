@@ -18,9 +18,12 @@ public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
                 {
                     Id = "a6383851-4451-46c9-8d99-252c81e153ee",
                     Name = "Admin"
+                },
+                new()
+                {
+                    Id="5619007e-b37b-494b-9681-94f4fb9ec279",
+                    Name = "User"
                 }
             };
     }
-
-
 }
